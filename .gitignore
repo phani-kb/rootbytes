@@ -1,24 +1,126 @@
-# Compiled class file
-*.class
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# Log file
-*.log
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# BlueJ files
-*.ctxt
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
+### VS Code ###
+.vscode/
+
+# Maven Wrapper
+.mvn/
+mvnw
+mvnw.cmd
+
+# Database
+*.db
+*.db-journal
+.dbeaver/
+*.h2.db
+*.trace.db
+*.lock.db
+
+# Env
+**/.env
+**/.env.local
+**/.env.*.local
+**/.env.dev
+**/.env.prod
+**/.env.test
+
+# Test output
+**/surefire-reports/
+**/failsafe-reports/
+.surefire*
+
+# Node modules
+node_modules/
+**/node_modules/
+package-lock.json
+yarn.lock
+
+# Security
+# SSL/TLS certificates and keys
+*.pem
+*.crt
+*.key
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# JWT keys
+jwt-keys/
+**/jwt-keys/
+
+# Coverage reports
+**/coverage/
+**/jacoco/
+
+# Logs
+logs/
+**/*.log
+
+# OS generated files
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Temp
+tmp/
+temp/
+**/tmp/
+**/temp/
+*.tmp
+*.swp
+*.swo
+
+### RootBytes ###
+
+data/
+backup/
+**/backup/
+*.bak
+archives/
+**/archives/
 *.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+*.tar
+*.gz
+*.bz2
+*.7z

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="master-artboard" viewBox="0 0 1044.838134765625 895.786376953125" version="1.1"
+     xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" style="enable-background:new 0 0 336 235.2;"
+     width="1044.838134765625px" height="895.786376953125px">
+    <rect id="ee-background" x="0" y="0" width="1044.838134765625" height="895.786376953125"
+          style="fill: rgb(255, 255, 255); fill-opacity: 1; pointer-events: none;"/>
+    <defs>
+        <style id="ee-google-fonts">@import url(https://fonts.googleapis.com/css?family=Audiowide:400);</style>
+        <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#6CC24A"/>
+            <stop offset="100%" stop-color="#3A8D3A"/>
+        </linearGradient>
+        <linearGradient id="g2" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stop-color="#FFB86B"/>
+            <stop offset="100%" stop-color="#FF8A4A"/>
+        </linearGradient>
+        <radialGradient id="gradient-0" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" style="stop-color: #ffffff"/>
+            <stop offset="1" style="stop-color: #cccccc"/>
+        </radialGradient>
+    </defs>
+
+
+    <g transform="matrix(0.9800000190734863, 0, 0, 0.9800000190734863, -200.80578994750977, -128.15123653411865)">
+        <g transform="translate(200,110) scale(2.1)">
+            <g transform="matrix(4.371665954589844, 0, 0, 4.371665954589844, -156.16818237304688, -223.16159439086914)">
+                <path d="M 174 124 A 74 36 0 0 1 100 160 A 74 36 0 0 1 26 124 A 74 36 0 0 1 100 88 A 74 36 0 0 1 174 124 Z"
+                      fill="#ffffff" stroke="#e6e6e6" stroke-width="1"
+                      transform="matrix(0.7159523963928223, 0, 0, 0.7159523963928223, 22.925004545634152, 18.594165802001946)"
+                      style="stroke: rgb(0, 0, 0);"/>
+                <path d="M 160 128 A 60 22 0 0 1 100 150 A 60 22 0 0 1 40 128 A 60 22 0 0 1 100 106 A 60 22 0 0 1 160 128 Z"
+                      fill="#e9e9e9"
+                      transform="matrix(0.7426181435585022, 0, 0, 0.7426181435585022, 20.507517020974802, 14.014854017680037)"/>
+                <g fill="none" stroke="#6CC24A" stroke-opacity="0.95" stroke-width="3" stroke-linecap="round"
+                   transform="matrix(0.6917627453804016, 0, 0, 0.6917627453804016, 92.09141108365736, 50.19853359836851)">
+                    <path d="M -18 40 C -18 24 0.9742167592048642 23.230661869049072 0.9742167592048642 9.230661869049072"/>
+                    <path d="M 0 40 C 0 26 17.970535278320312 22.73250389099121 17.970535278320312 10.732503890991211"
+                          stroke-opacity="0.8"/>
+                    <path d="M 18 40 C 18 26 34.23434638977051 23.479742527008057 34.23434638977051 11.479742527008057"
+                          stroke-opacity="0.6"/>
+                </g>
+            </g>
+        </g>
+        <text x="750" y="980" text-anchor="middle" fill="#333333"
+              style="font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; font-size: 120px; text-anchor: middle; fill: rgb(51, 51, 51); white-space: pre;">
+            RootBytes
+        </text>
+        <metadata>
+            <creator>Phani K</creator>
+            <unique-id>a3b9f2c4-7d1e-4f90-b2d3-6c8a9e2b1f5a</unique-id>
+            <created>2025-11-11T00:00:00Z</created>
+        </metadata>
+    </g>
+</svg>
