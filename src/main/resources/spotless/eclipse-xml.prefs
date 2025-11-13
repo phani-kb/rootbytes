@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+indentationChar=space
+indentationSize=2
+clearAllBlankLines=true
+lineWidth=120
+splitMultiAttrs=false
+alignEndBracket=false
+cleanupTagNameCase=0
+cleanupAttrNameCase=0
+insertRequiredAttrs=false
+insertMissingTags=false
+quoteAttrValues=true
+formatSource=true
+outputCodeset=UTF-8

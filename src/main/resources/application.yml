@@ -1,0 +1,16 @@
+---
+server:
+  port: "${SERVER_PORT:8080}"
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  profiles:
+    active: "${SPRING_PROFILES_ACTIVE:dev}"
+  application:
+    name: RootBytes
+    version: 0.0.1-SNAPSHOT
