@@ -31,10 +31,18 @@
     <commons-io.version>2.20.0</commons-io.version>
     <flyway.version>11.15.0</flyway.version>
     <h2.version>2.3.232</h2.version>
+    <jackson.version>2.20.0</jackson.version>
+    <jacoco.version>0.8.11</jacoco.version>
     <java.version>21</java.version>
     <mapstruct.version>1.6.3</mapstruct.version>
+    <maven.springdoc-openapi.version>1.5</maven.springdoc-openapi.version>
+    <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
+    <mockito.version>5.20.0</mockito.version>
+    <openapi.url>http://localhost:8080/v3/api-docs</openapi.url>
+    <palantir.version>2.81.0</palantir.version>
     <spotless.version>3.0.0</spotless.version>
     <springdoc.version>2.8.14</springdoc.version>
+    <versions.maven.plugin.version>2.16.2</versions.maven.plugin.version>
   </properties>
   <dependencies>
 
@@ -187,21 +195,6 @@
             <trimTrailingWhitespace />
             <endWithNewline />
           </yaml>
-          <!--sql>
-            <includes>
-              <include>src/main/resources/db/migration/**/*.sql</include>
-            </includes>
-            <trimTrailingWhitespace />
-            <endWithNewline />
-            <dbeaver>
-              <configFile>src/main/resources/db/dbeaver.properties</configFile>
-            </dbeaver>
-            <idea>
-              <codeStyleSettingsPath>${basedir}/src/main/resources/idea/idea.xml</codeStyleSettingsPath>
-              <withDefaults>true</withDefaults>
-              <binaryPath>idea</binaryPath>
-            </idea>
-          </sql-->
           <formats>
             <format>
               <includes>
@@ -249,6 +242,85 @@
               <artifactId>lombok</artifactId>
             </path>
           </annotationProcessorPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.plugin.version}</version>
+        <configuration>
+          <runOrder>failedFirst</runOrder>
+          <parallel>methods</parallel>
+          <threadCount>4</threadCount>
+          <argLine>@{argLine} -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>${versions.maven.plugin.version}</version>
+        <configuration>
+          <excludeReactor>true</excludeReactor>
+          <ignoredVersions>(?i).*-(alpha|beta|m|rc)([-. ]?\d+)?</ignoredVersions>
+          <processDependencyManagement>false</processDependencyManagement>
+          <processDependencies>true</processDependencies>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <configuration>
+          <excludes>
+            <exclude>**/mapper/*MapperImpl.class</exclude>
+            <exclude>**/config/H2Config.class</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jacoco-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <rule>
+                  <element>PACKAGE</element>
+                  <limits>
+                    <limit>
+                      <counter>LINE</counter>
+                      <value>COVEREDRATIO</value>
+                      <minimum>0.80</minimum>
+                    </limit>
+                  </limits>
+                </rule>
+              </rules>
+            </configuration>
+          </execution>
+          <execution>
+            <id>prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-maven-plugin</artifactId>
+        <version>${maven.springdoc-openapi.version}</version>
+        <configuration>
+          <apiDocsUrl>${openapi.url}</apiDocsUrl>
+          <outputFileName>openapi.json</outputFileName>
+          <outputDir>${project.build.directory}</outputDir>
+          <failOnError>false</failOnError>
         </configuration>
       </plugin>
       <plugin>
