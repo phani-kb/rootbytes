@@ -29,17 +29,31 @@
   </issueManagement>
   <properties>
     <commons-io.version>2.20.0</commons-io.version>
+    <commons-lang3.version>3.19.0</commons-lang3.version>
+    <findsecbugs.version>1.13.0</findsecbugs.version>
     <flyway.version>11.15.0</flyway.version>
     <h2.version>2.3.232</h2.version>
     <jackson.version>2.20.0</jackson.version>
     <jacoco.version>0.8.11</jacoco.version>
     <java.version>21</java.version>
+    <lombok-mapstruct-binding-version>0.2.0</lombok-mapstruct-binding-version>
+    <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
+    <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
+    <maven.dependency.plugin.version>3.9.0</maven.dependency.plugin.version>
+    <maven.enforcer.plugin.version>3.4.1</maven.enforcer.plugin.version>
+    <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
     <maven.springdoc-openapi.version>1.5</maven.springdoc-openapi.version>
     <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
     <mockito.version>5.20.0</mockito.version>
     <openapi.url>http://localhost:8080/v3/api-docs</openapi.url>
     <palantir.version>2.81.0</palantir.version>
+    <pmd-plugin.version>3.28.0</pmd-plugin.version>
+    <pmd.version>7.10.0</pmd.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <spotbugs.annotations.version>4.9.8</spotbugs.annotations.version>
+    <spotbugs.maven.version>4.9.8.0</spotbugs.maven.version>
     <spotless.version>3.0.0</spotless.version>
     <springdoc.version>2.8.14</springdoc.version>
     <versions.maven.plugin.version>2.16.2</versions.maven.plugin.version>
@@ -55,6 +69,11 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>${commons-io.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang3.version}</version>
     </dependency>
     <dependency>
       <groupId>org.flywaydb</groupId>
@@ -217,13 +236,6 @@
         </configuration>
         <executions>
           <execution>
-            <id>spotless-check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-          <execution>
             <id>spotless-apply</id>
             <goals>
               <goal>apply</goal>
@@ -233,16 +245,137 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>${spotbugs.maven.version}</version>
+        <configuration>
+          <effort>Max</effort>
+          <threshold>Low</threshold>
+          <failOnError>true</failOnError>
+          <xmlOutput>false</xmlOutput>
+          <outputDirectory>${project.build.directory}/spotbugs</outputDirectory>
+          <excludeFilterFile>${basedir}/src/main/resources/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>spotbugs-check</id>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven.checkstyle.plugin.version}</version>
+        <configuration>
+          <configLocation>${basedir}/src/main/resources/checkstyle/checkstyle.xml</configLocation>
+          <consoleOutput>true</consoleOutput>
+          <failOnViolation>true</failOnViolation>
+          <suppressionsLocation>${basedir}/src/main/resources/checkstyle/checkstyle-suppressions.xml</suppressionsLocation>
+          <suppressionsFileExpression>checkstyle.suppressions.path</suppressionsFileExpression>
+          <excludes>target/**</excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
           <annotationProcessorPaths>
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
             </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${mapstruct.version}</version>
+            </path>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok-mapstruct-binding</artifactId>
+              <version>${lombok-mapstruct-binding-version}</version>
+            </path>
           </annotationProcessorPaths>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven.dependency.plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven.enforcer.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>${java.version}</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven.failsafe.plugin.version}</version>
+        <configuration>
+          <argLine>-javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar</argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${pmd-plugin.version}</version>
+        <configuration>
+          <rulesets>
+            <ruleset>src/main/resources/pmd/pmd-ruleset.xml</ruleset>
+          </rulesets>
+          <printFailingErrors>true</printFailingErrors>
+          <failOnViolation>true</failOnViolation>
+          <linkXRef>false</linkXRef>
+          <excludeRoots>
+            <excludeRoot>target</excludeRoot>
+          </excludeRoots>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+              <goal>cpd-check</goal>
+            </goals>
+            <phase>verify</phase>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -267,6 +400,10 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.flywaydb</groupId>
+        <artifactId>flyway-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>${jacoco.version}</version>
@@ -283,6 +420,7 @@
               <goal>check</goal>
             </goals>
             <configuration>
+              <skip>${skipTests}</skip>
               <rules>
                 <rule>
                   <element>PACKAGE</element>
@@ -302,6 +440,9 @@
             <goals>
               <goal>prepare-agent</goal>
             </goals>
+            <configuration>
+              <skip>${skipTests}</skip>
+            </configuration>
           </execution>
           <execution>
             <id>report</id>
@@ -309,6 +450,9 @@
               <goal>report</goal>
             </goals>
             <phase>verify</phase>
+            <configuration>
+              <skip>${skipTests}</skip>
+            </configuration>
           </execution>
         </executions>
       </plugin>

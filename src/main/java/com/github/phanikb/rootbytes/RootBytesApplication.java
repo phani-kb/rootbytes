@@ -3,6 +3,7 @@
  * Copyright (C) 2025 RootBytes. All Rights Reserved.
  * Author: Phani K
  */
+
 package com.github.phanikb.rootbytes;
 
 import org.springframework.boot.SpringApplication;

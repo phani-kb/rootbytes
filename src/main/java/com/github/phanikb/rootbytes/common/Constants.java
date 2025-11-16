@@ -3,6 +3,7 @@
  * Copyright (C) 2025 RootBytes. All Rights Reserved.
  * Author: Phani K
  */
+
 package com.github.phanikb.rootbytes.common;
 
 public final class Constants {
@@ -12,6 +13,7 @@ public final class Constants {
             \u001B[92m::
             :: %s :: %s ::
             ::\u001B[0m""";
+    public static final long DEFAULT_INVITATION_CODE_EXPIRY_DAYS = 7;
 
     private Constants() {}
 }
