@@ -35,6 +35,11 @@ spring:
     locations:
     - "classpath:db/migration/${database.type:h2}"
     validate-on-migrate: true
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
 logging:
   level:
     root: INFO

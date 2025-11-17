@@ -32,6 +32,7 @@ create table if not exists invitation_codes (
     code VARCHAR(50) unique not null,
     inviter_id uuid not null,
     invitee_id uuid,
+    invitee_email VARCHAR(255) not null,
     is_active BOOLEAN default true,
     expires_at TIMESTAMP not null,
     used_at TIMESTAMP,
@@ -43,6 +44,10 @@ create table if not exists invitation_codes (
 create index idx_invitation_codes_code on invitation_codes (code);
 
 create index idx_invitation_codes_inviter on invitation_codes (inviter_id);
+
+create index idx_invitation_codes_invitee on invitation_codes (invitee_id);
+
+create index idx_invitation_codes_invitee_email on invitation_codes (invitee_email);
 
 -- OTP Codes table
 create table otp_codes (

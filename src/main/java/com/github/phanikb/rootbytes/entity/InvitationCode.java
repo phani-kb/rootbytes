@@ -51,6 +51,9 @@ public class InvitationCode {
     @JoinColumn(name = "invitee_id")
     private UserEntity invitee;
 
+    @Column(name = "invitee_email", nullable = false, length = 100)
+    private String inviteeEmail;
+
     @Column(name = "is_active", nullable = false)
     @Builder.Default
     private Boolean isActive = true;

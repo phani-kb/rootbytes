@@ -8,6 +8,8 @@ package com.github.phanikb.rootbytes.service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Locale;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class InvitationCodeService {
     private final InvitationCodeRepository invitationCodeRepository;
 
     @Transactional(readOnly = true)
-    public InvitationCode validateInvitationCode(String code) {
+    public InvitationCode validateInvitationCode(String code, UserEntity invitee) {
         log.debug("Validating invitation code: {}", code);
 
         InvitationCode invitation = invitationCodeRepository
@@ -44,6 +46,10 @@ public class InvitationCodeService {
             throw new InvalidInvitationException("Invitation code has already been used");
         }
 
+        if (!invitation.getInviteeEmail().equals(invitee.getEmail())) {
+            throw new InvalidInvitationException("Invitation code is not valid for this user");
+        }
+
         return invitation;
     }
 
@@ -51,26 +57,10 @@ public class InvitationCodeService {
     public InvitationCode useInvitationCode(String code, UserEntity invitee) {
         log.info("Using invitation code: {}", code);
 
-        InvitationCode invitation = validateInvitationCode(code);
+        InvitationCode invitation = validateInvitationCode(code, invitee);
         invitation.setInvitee(invitee);
         invitation.setUsedAt(Instant.now());
         invitation.setIsActive(false);
-
-        return invitationCodeRepository.save(invitation);
-    }
-
-    @Transactional
-    public InvitationCode generateInvitationCode(UserEntity inviter) {
-        log.info("Generating invitation code for user: {}", inviter.getEmail());
-
-        String code = generateUniqueCode();
-
-        InvitationCode invitation = InvitationCode.builder()
-                .code(code)
-                .inviter(inviter)
-                .isActive(true)
-                .expiresAt(Instant.now().plus(Constants.DEFAULT_INVITATION_CODE_EXPIRY_DAYS, ChronoUnit.DAYS))
-                .build();
 
         return invitationCodeRepository.save(invitation);
     }
@@ -84,6 +74,7 @@ public class InvitationCodeService {
         InvitationCode invitation = InvitationCode.builder()
                 .code(code)
                 .inviter(inviter)
+                .inviteeEmail(inviteeEmail)
                 .isActive(true)
                 .expiresAt(Instant.now().plus(Constants.DEFAULT_INVITATION_CODE_EXPIRY_DAYS, ChronoUnit.DAYS))
                 .build();
@@ -92,6 +83,10 @@ public class InvitationCodeService {
     }
 
     private String generateUniqueCode() {
-        return java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase(java.util.Locale.ROOT);
+        return UUID.randomUUID()
+                .toString()
+                .replaceAll("-", "")
+                .substring(0, Math.min(Constants.INVITATION_CODE_LENGTH, Constants.MAX_INVITATION_CODE_LENGTH))
+                .toUpperCase(Locale.ROOT);
     }
 }

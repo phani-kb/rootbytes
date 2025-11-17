@@ -6,64 +6,48 @@
 
 package com.github.phanikb.rootbytes.controller;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.github.phanikb.rootbytes.common.Constants;
+import com.github.phanikb.rootbytes.dto.request.InvitationCodeRequest;
 import com.github.phanikb.rootbytes.dto.response.InvitationCodeResponse;
 import com.github.phanikb.rootbytes.dto.response.RbApiResponse;
 import com.github.phanikb.rootbytes.entity.InvitationCode;
 import com.github.phanikb.rootbytes.entity.UserEntity;
+import com.github.phanikb.rootbytes.mapper.InvitationCodeMapper;
+import com.github.phanikb.rootbytes.security.RbCurrentUser;
 import com.github.phanikb.rootbytes.service.InvitationCodeService;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/invitations")
 @RequiredArgsConstructor
-public class InvitationController {
+public class InvitationCodeController {
 
     private final InvitationCodeService invitationCodeService;
+    private final InvitationCodeMapper invitationCodeMapper;
 
     @PostMapping("/generate")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize(Constants.ADMIN_ROLE)
     public ResponseEntity<RbApiResponse<InvitationCodeResponse>> generateInvitationCode(
-            @AuthenticationPrincipal UserEntity admin, @RequestBody GenerateInvitationRequest request) {
+            @Valid @RequestBody InvitationCodeRequest request, @RbCurrentUser UserEntity admin) {
         log.info("Admin {} is generating invitation code for email: {}", admin.getEmail(), request.getInviteeEmail());
 
         InvitationCode invitation = invitationCodeService.generateInvitationCode(admin, request.getInviteeEmail());
-
-        InvitationCodeResponse response = InvitationCodeResponse.builder()
-                .code(invitation.getCode())
-                .inviterEmail(admin.getEmail())
-                .isActive(invitation.getIsActive())
-                .expiresAt(invitation.getExpiresAt())
-                .createdAt(invitation.getCreatedAt())
-                .build();
+        InvitationCodeResponse response = invitationCodeMapper.toResponse(invitation);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(RbApiResponse.success("Invitation code generated successfully", response));
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class GenerateInvitationRequest {
-        @NotBlank(message = "Invitee email is required")
-        @Email(message = "Valid email is required")
-        private String inviteeEmail;
     }
 }

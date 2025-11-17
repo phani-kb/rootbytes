@@ -25,6 +25,7 @@ import com.github.phanikb.rootbytes.repository.InvitationCodeRepository;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,6 +68,7 @@ class InvitationCodeServiceTest {
                 .id(UUID.randomUUID())
                 .code(code)
                 .inviter(inviter)
+                .inviteeEmail(invitee.getEmail())
                 .isActive(true)
                 .build();
 
@@ -74,7 +76,7 @@ class InvitationCodeServiceTest {
                 .id(UUID.randomUUID())
                 .code("USED1234")
                 .inviter(inviter)
-                .invitee(invitee)
+                .inviteeEmail(invitee.getEmail())
                 .isActive(true)
                 .usedAt(Instant.now())
                 .build();
@@ -83,6 +85,7 @@ class InvitationCodeServiceTest {
                 .id(UUID.randomUUID())
                 .code("INACTIVE")
                 .inviter(inviter)
+                .inviteeEmail(invitee.getEmail())
                 .isActive(false)
                 .build();
     }
@@ -91,11 +94,13 @@ class InvitationCodeServiceTest {
     void shouldValidateInvitationCode() {
         when(invitationCodeRepository.findByCode(code)).thenReturn(Optional.of(validCode));
 
-        InvitationCode result = invitationCodeService.validateInvitationCode(code);
+        InvitationCode result = invitationCodeService.validateInvitationCode(code, invitee);
 
         assertNotNull(result);
         assertEquals(code, result.getCode());
         assertTrue(result.getIsActive());
+        assertNull(result.getUsedAt());
+        assertEquals(invitee.getEmail(), result.getInviteeEmail());
         verify(invitationCodeRepository).findByCode(code);
     }
 
@@ -103,7 +108,8 @@ class InvitationCodeServiceTest {
     void shouldThrowExceptionWhenCodeNotFound() {
         when(invitationCodeRepository.findByCode(code)).thenReturn(Optional.empty());
 
-        assertThrows(InvalidInvitationException.class, () -> invitationCodeService.validateInvitationCode(code));
+        assertThrows(
+                InvalidInvitationException.class, () -> invitationCodeService.validateInvitationCode(code, invitee));
 
         verify(invitationCodeRepository).findByCode(code);
     }
@@ -112,7 +118,9 @@ class InvitationCodeServiceTest {
     void shouldThrowExceptionWhenCodeIsInactive() {
         when(invitationCodeRepository.findByCode("INACTIVE")).thenReturn(Optional.of(inactiveCode));
 
-        assertThrows(InvalidInvitationException.class, () -> invitationCodeService.validateInvitationCode("INACTIVE"));
+        assertThrows(
+                InvalidInvitationException.class,
+                () -> invitationCodeService.validateInvitationCode("INACTIVE", invitee));
 
         verify(invitationCodeRepository).findByCode("INACTIVE");
     }
@@ -121,7 +129,9 @@ class InvitationCodeServiceTest {
     void shouldThrowExceptionWhenCodeAlreadyUsed() {
         when(invitationCodeRepository.findByCode("USED1234")).thenReturn(Optional.of(usedCode));
 
-        assertThrows(InvalidInvitationException.class, () -> invitationCodeService.validateInvitationCode("USED1234"));
+        assertThrows(
+                InvalidInvitationException.class,
+                () -> invitationCodeService.validateInvitationCode("USED1234", invitee));
 
         verify(invitationCodeRepository).findByCode("USED1234");
     }
@@ -145,7 +155,7 @@ class InvitationCodeServiceTest {
     void shouldGenerateInvitationCode() {
         when(invitationCodeRepository.save(any(InvitationCode.class))).thenReturn(validCode);
 
-        InvitationCode result = invitationCodeService.generateInvitationCode(inviter);
+        InvitationCode result = invitationCodeService.generateInvitationCode(inviter, invitee.getEmail());
 
         assertNotNull(result);
         assertEquals(inviter, result.getInviter());
@@ -163,8 +173,22 @@ class InvitationCodeServiceTest {
             return code;
         });
 
-        invitationCodeService.generateInvitationCode(inviter);
+        invitationCodeService.generateInvitationCode(inviter, invitee.getEmail());
 
         verify(invitationCodeRepository).save(any(InvitationCode.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailMismatch() {
+        when(invitationCodeRepository.findByCode(code)).thenReturn(Optional.of(validCode));
+
+        UserEntity differentInvitee = UserEntity.builder()
+                .id(UUID.randomUUID())
+                .email("different@example.com")
+                .build();
+        assertThrows(
+                InvalidInvitationException.class,
+                () -> invitationCodeService.validateInvitationCode(code, differentInvitee));
+        verify(invitationCodeRepository).findByCode(code);
     }
 }
