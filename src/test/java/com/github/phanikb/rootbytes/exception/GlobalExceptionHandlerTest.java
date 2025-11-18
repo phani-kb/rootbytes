@@ -16,7 +16,9 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.github.phanikb.rootbytes.dto.response.ErrorResponse;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GlobalExceptionHandlerTest {
 
@@ -36,9 +38,9 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<ErrorResponse> response =
                 handler.handleGenericException(new RuntimeException("boom"), webRequest);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getMessage()).contains("unexpected error");
-        assertThat(response.getBody().getPath()).isEqualTo("/api/test");
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().getMessage().contains("unexpected error"));
+        assertEquals("/api/test", response.getBody().getPath());
     }
 }

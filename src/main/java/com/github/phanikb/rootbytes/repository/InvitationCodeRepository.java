@@ -24,4 +24,6 @@ public interface InvitationCodeRepository extends JpaRepository<InvitationCode, 
     List<InvitationCode> findByInvitee(UserEntity invitee);
 
     List<InvitationCode> findByInviter(UserEntity inviter);
+
+    Optional<InvitationCode> findByInviteeEmail(String inviteeEmail);
 }

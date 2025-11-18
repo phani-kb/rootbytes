@@ -22,7 +22,8 @@ import com.github.phanikb.rootbytes.entity.UserEntity;
 import com.github.phanikb.rootbytes.mapper.InvitationCodeMapper;
 import com.github.phanikb.rootbytes.service.InvitationCodeService;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -56,10 +57,10 @@ class InvitationCodeControllerTest {
 
         var response = controller.generateInvitationCode(request, admin);
 
-        assertThat(response.getStatusCode().value()).isEqualTo(201);
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getData()).isNotNull();
-        assertThat(response.getBody().getData().getCode()).isEqualTo("ABC12345");
+        assertEquals(201, response.getStatusCode().value());
+        assertNotNull(response.getBody());
+        assertNotNull(response.getBody().getData());
+        assertEquals("ABC12345", response.getBody().getData().getCode());
     }
 
     private UserEntity createMockAdmin() {

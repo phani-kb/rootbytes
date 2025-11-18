@@ -8,11 +8,12 @@ package com.github.phanikb.rootbytes.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
 import com.github.phanikb.rootbytes.dto.response.InvitationCodeResponse;
 import com.github.phanikb.rootbytes.entity.InvitationCode;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface InvitationCodeMapper {
 
     InvitationCodeResponse toResponse(InvitationCode invitationCode);

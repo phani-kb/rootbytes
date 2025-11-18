@@ -90,3 +90,22 @@ create index idx_permitted_lastnames_name on permitted_lastnames (last_name);
 create index idx_permitted_lastnames_active on permitted_lastnames (is_active);
 
 create index idx_permitted_lastnames_category on permitted_lastnames (category);
+
+-- Units table
+create table if not exists units (
+    id uuid default random_uuid () primary key,
+    name VARCHAR(50) not null unique,
+    abbreviation VARCHAR(10) not null unique,
+    unit_type VARCHAR(20) not null,
+    description VARCHAR(200),
+    is_active BOOLEAN not null default true,
+    created_at TIMESTAMP not null default current_timestamp,
+    updated_at TIMESTAMP not null default current_timestamp,
+    constraint chk_unit_type check (unit_type in ('VOLUME', 'WEIGHT', 'COUNT', 'LENGTH', 'TEMPERATURE', 'TIME'))
+);
+
+create index idx_units_type on units (unit_type);
+
+create index idx_units_is_active on units (is_active);
+
+create index idx_units_name on units (name);
