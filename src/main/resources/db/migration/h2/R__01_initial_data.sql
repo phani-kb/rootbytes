@@ -1,4 +1,15 @@
 -- Seed initial configuration values
+delete from system_config;
+
+insert into
+    system_config (key_name, key_value, description)
+values
+    ('invitation.expiry.days', '7', 'Days until invitation expires'),
+    ('invitation.max-per-user', '1', 'Maximum invitations per user'),
+    ('security.max-login-failures', '3', 'Maximum login failures before lockout'),
+    ('validation.lastname.enabled', 'true', 'Enable last name validation against valid list'),
+    ('locale.default', 'en', 'Default application locale'),
+    ('locale.supported', 'en', 'Supported application locales');
 
 delete from units;
 

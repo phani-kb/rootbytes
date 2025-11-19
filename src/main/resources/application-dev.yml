@@ -15,6 +15,15 @@ spring:
   mail:
     host: localhost
     port: 1025
+  datasource:
+    url: "${DATABASE_URL:jdbc:h2:file:./data/h2/rootbytes;MODE=PostgreSQL;DB_CLOSE_DELAY=-1}"
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: null
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
   h2:
     console:
       enabled: true

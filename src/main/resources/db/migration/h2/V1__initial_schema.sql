@@ -109,3 +109,15 @@ create index idx_units_type on units (unit_type);
 create index idx_units_is_active on units (is_active);
 
 create index idx_units_name on units (name);
+
+-- System Configuration table
+create table system_config (
+    key_name VARCHAR(100) primary key not null,
+    key_value VARCHAR(255) not null,
+    description CLOB,
+    updated_by uuid,
+    updated_at TIMESTAMP not null default current_timestamp,
+    foreign key (updated_by) references users (id)
+);
+
+create index idx_system_name on system_config (key_name);
