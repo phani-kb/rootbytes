@@ -62,8 +62,8 @@ public class PermittedLastNameController {
 
     @GetMapping("/paginated")
     public ResponseEntity<RbApiResponse<PagedResponse<PermittedLastNameResponse>>> getAllActiveLastNamesPaginated(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "#{${rb.pagination.default-page-number:0}}") int page,
+            @RequestParam(defaultValue = "#{${rb.pagination.default-page-size:20}}") int size,
             @RequestParam(defaultValue = "lastName") String sortBy) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));

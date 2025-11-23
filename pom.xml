@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>3.5.7</version>
+    <version>4.0.0</version>
     <relativePath />
   </parent>
   <groupId>com.github.phanikb</groupId>
@@ -37,7 +37,7 @@
     <findsecbugs.version>1.13.0</findsecbugs.version>
     <flyway.version>11.15.0</flyway.version>
     <h2.version>2.3.232</h2.version>
-    <jackson.version>2.20.0</jackson.version>
+    <jackson.version>2.20.1</jackson.version>
     <jacoco.version>0.8.11</jacoco.version>
     <java.version>21</java.version>
     <lombok-mapstruct-binding-version>0.2.0</lombok-mapstruct-binding-version>
@@ -127,6 +127,11 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
     <dependency>
@@ -145,6 +150,15 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-test-autoconfigure</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>

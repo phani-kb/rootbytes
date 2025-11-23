@@ -23,5 +23,13 @@ public final class Constants {
     public static final int MAX_INVITATION_CODE_LENGTH = 32;
     public static final String DEFAULT_USER_ROLE = "USER";
 
+    public static final class Page {
+        public static final int DEFAULT_PAGE_NUMBER = 0;
+        public static final int DEFAULT_PAGE_SIZE = 20;
+        public static final int MAX_PAGE_SIZE = 50;
+
+        private Page() {}
+    }
+
     private Constants() {}
 }

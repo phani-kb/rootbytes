@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ import com.github.phanikb.rootbytes.security.RbUserDetails;
 public class AuditorAwareImpl implements AuditorAware<UUID> {
 
     @Override
-    @NonNull
     public Optional<UUID> getCurrentAuditor() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 

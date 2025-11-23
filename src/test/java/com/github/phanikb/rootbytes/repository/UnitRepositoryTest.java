@@ -11,8 +11,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
@@ -41,11 +41,41 @@ class UnitRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        activeVolumeUnit = repository.findByName("Liter").orElseThrow();
+        activeVolumeUnit = Unit.builder()
+                .name("Liter")
+                .abbreviation("L")
+                .unitType(UnitType.VOLUME)
+                .description("Metric large volume measurement")
+                .isActive(true)
+                .build();
+        activeVolumeUnit = repository.saveAndFlush(activeVolumeUnit);
 
-        Unit gallon = repository.findByName("Gallon").orElseThrow();
-        gallon.setActive(false);
-        repository.saveAndFlush(gallon);
+        Unit inactiveVolumeUnit = Unit.builder()
+                .name("Gallon")
+                .abbreviation("gal")
+                .unitType(UnitType.VOLUME)
+                .description("Imperial large volume measurement")
+                .isActive(false)
+                .build();
+        repository.saveAndFlush(inactiveVolumeUnit);
+
+        Unit milliliter = Unit.builder()
+                .name("Milliliter")
+                .abbreviation("ml")
+                .unitType(UnitType.VOLUME)
+                .description("Metric small volume measurement")
+                .isActive(true)
+                .build();
+        repository.saveAndFlush(milliliter);
+
+        Unit gram = Unit.builder()
+                .name("Gram")
+                .abbreviation("g")
+                .unitType(UnitType.WEIGHT)
+                .description("Metric small weight measurement")
+                .isActive(true)
+                .build();
+        repository.saveAndFlush(gram);
 
         entityManager.clear();
     }

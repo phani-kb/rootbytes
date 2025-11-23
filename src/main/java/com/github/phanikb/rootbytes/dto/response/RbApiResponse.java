@@ -9,6 +9,8 @@ package com.github.phanikb.rootbytes.dto.response;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
+import jakarta.annotation.Nullable;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,8 +28,10 @@ public class RbApiResponse<T> {
 
     private Boolean success;
 
+    @Nullable
     private String message;
 
+    @Nullable
     private T data;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
