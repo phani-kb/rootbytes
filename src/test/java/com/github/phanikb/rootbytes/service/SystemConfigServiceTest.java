@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,7 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@DisplayName("SystemConfigService Tests")
 class SystemConfigServiceTest {
 
     @Mock
@@ -65,7 +63,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get value from database when key exists")
     void shouldGetValueFromDatabase() {
         when(cacheDelegate.getValue(TEST_KEY)).thenReturn(Optional.of(TEST_VALUE));
 
@@ -77,7 +74,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should fallback to application.yml when key not in database")
     void shouldFallbackToApplicationYml() {
         String ymlValue = "100";
         when(cacheDelegate.getValue(TEST_KEY)).thenReturn(Optional.of(ymlValue));
@@ -90,7 +86,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should return empty when key not found anywhere")
     void shouldReturnEmptyWhenKeyNotFound() {
         when(cacheDelegate.getValue(TEST_KEY)).thenReturn(Optional.empty());
 
@@ -101,7 +96,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get value with default when key exists")
     void shouldGetValueWithDefault() {
         when(cacheDelegate.getValue(TEST_KEY)).thenReturn(Optional.of(TEST_VALUE));
 
@@ -111,7 +105,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should return default value when key not found")
     void shouldReturnDefaultWhenKeyNotFound() {
         String defaultValue = "default-value";
         when(cacheDelegate.getValue(TEST_KEY)).thenReturn(Optional.empty());
@@ -122,7 +115,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get integer value successfully")
     void shouldGetIntValueSuccessfully() {
         when(cacheDelegate.getValue("page.size")).thenReturn(Optional.of("20"));
 
@@ -132,7 +124,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should return default when integer parsing fails")
     void shouldReturnDefaultWhenIntParsingFails() {
         when(cacheDelegate.getValue("page.size")).thenReturn(Optional.of("invalid"));
 
@@ -142,7 +133,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get long value successfully")
     void shouldGetLongValueSuccessfully() {
         when(cacheDelegate.getValue("max.file.size")).thenReturn(Optional.of("5242880"));
 
@@ -152,7 +142,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get boolean value successfully")
     void shouldGetBooleanValueSuccessfully() {
         when(cacheDelegate.getValue("feature.enabled")).thenReturn(Optional.of("true"));
 
@@ -162,7 +151,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should create new config when setting value for new key")
     void shouldCreateNewConfig() {
         when(cacheDelegate.setValue(eq(TEST_KEY), eq(TEST_VALUE), eq(TEST_DESCRIPTION), any(UserEntity.class)))
                 .thenReturn(testConfig);
@@ -179,7 +167,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should update existing config when setting value for existing key")
     void shouldUpdateExistingConfig() {
         String newValue = "75";
         SystemConfig updatedConfig = SystemConfig.builder()
@@ -202,7 +189,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should set value without description")
     void shouldSetValueWithoutDescription() {
         SystemConfig emptyDescConfig = SystemConfig.builder()
                 .keyName(TEST_KEY)
@@ -225,7 +211,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should delete config by key")
     void shouldDeleteConfig() {
         systemConfigService.deleteValue(TEST_KEY);
 
@@ -233,7 +218,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get all configs")
     void shouldGetAllConfigs() {
         SystemConfig config1 =
                 SystemConfig.builder().keyName("key1").keyValue("value1").build();
@@ -251,7 +235,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should get config entity by key")
     void shouldGetConfigEntity() {
         when(systemConfigRepository.findByKeyName(TEST_KEY)).thenReturn(Optional.of(testConfig));
 
@@ -264,7 +247,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should check if config exists")
     void shouldCheckIfConfigExists() {
         when(systemConfigRepository.existsByKeyName(TEST_KEY)).thenReturn(true);
 
@@ -275,7 +257,6 @@ class SystemConfigServiceTest {
     }
 
     @Test
-    @DisplayName("Should return false when config does not exist")
     void shouldReturnFalseWhenConfigNotExists() {
         when(systemConfigRepository.existsByKeyName(TEST_KEY)).thenReturn(false);
 

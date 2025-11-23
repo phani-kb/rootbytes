@@ -91,6 +91,22 @@ create index idx_permitted_lastnames_active on permitted_lastnames (is_active);
 
 create index idx_permitted_lastnames_category on permitted_lastnames (category);
 
+-- LastName Aliases table
+create table if not exists lastname_aliases (
+    id uuid default random_uuid () primary key,
+    permitted_lastname_id uuid not null,
+    alias VARCHAR(100) not null,
+    created_at TIMESTAMP not null default current_timestamp,
+    updated_at TIMESTAMP not null default current_timestamp,
+    foreign key (permitted_lastname_id) references permitted_lastnames (id) on delete cascade
+);
+
+create index idx_lastname_aliases_permitted_lastname on lastname_aliases (permitted_lastname_id);
+
+create index idx_lastname_aliases_alias on lastname_aliases (alias);
+
+create unique index idx_lastname_aliases_unique on lastname_aliases (permitted_lastname_id, alias);
+
 -- Units table
 create table if not exists units (
     id uuid default random_uuid () primary key,

@@ -14,7 +14,11 @@
   <description>Share and preserve family recipes by last name. Rooted in tradition, served with code.</description>
   <url />
   <licenses>
-    <license />
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
   <developers>
     <developer>
@@ -43,6 +47,8 @@
     <maven.dependency.plugin.version>3.9.0</maven.dependency.plugin.version>
     <maven.enforcer.plugin.version>3.4.1</maven.enforcer.plugin.version>
     <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
+    <maven.project.info.reports.plugin.version>3.9.0</maven.project.info.reports.plugin.version>
+    <maven.site.plugin.version>3.21.0</maven.site.plugin.version>
     <maven.springdoc-openapi.version>1.5</maven.springdoc-openapi.version>
     <maven.surefire.plugin.version>3.5.4</maven.surefire.plugin.version>
     <mockito.version>5.20.0</mockito.version>
@@ -52,6 +58,7 @@
     <pmd.version>7.10.0</pmd.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <skipTests>false</skipTests>
     <spotbugs.annotations.version>4.9.8</spotbugs.annotations.version>
     <spotbugs.maven.version>4.9.8.0</spotbugs.maven.version>
     <spotless.version>3.0.0</spotless.version>
@@ -155,6 +162,7 @@
           <pom>
             <includes>
               <include>pom.xml</include>
+              <include>src/**/*.xml</include>
             </includes>
             <sortPom>
               <expandEmptyElements>false</expandEmptyElements>
@@ -379,6 +387,11 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${maven.site.plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven.surefire.plugin.version}</version>
         <configuration>
@@ -481,5 +494,15 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${maven.project.info.reports.plugin.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
 
 </project>
