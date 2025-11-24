@@ -6,7 +6,7 @@
 
 package com.github.phanikb.rootbytes.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.function.Function;
 
 import jakarta.annotation.Nullable;
@@ -34,14 +34,14 @@ public class RbApiResponse<T> {
     @Nullable
     private T data;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    private Instant timestamp;
 
     public static RbApiResponse<Void> success(String message) {
         return RbApiResponse.<Void>builder()
                 .success(true)
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build();
     }
 
@@ -49,7 +49,7 @@ public class RbApiResponse<T> {
         return RbApiResponse.<Void>builder()
                 .success(false)
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build();
     }
 
@@ -57,28 +57,32 @@ public class RbApiResponse<T> {
         return RbApiResponse.<T>builder()
                 .success(false)
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build();
     }
 
     public static <T> RbApiResponse<T> success(T data) {
-        return success(null, data);
+        return RbApiResponse.<T>builder()
+                .success(true)
+                .data(data)
+                .timestamp(Instant.now())
+                .build();
     }
 
     public <U> RbApiResponse<U> map(Function<T, U> mapper) {
         return RbApiResponse.<U>builder()
                 .success(this.success)
-                .data(mapper.apply(this.data))
+                .data(this.data != null ? mapper.apply(this.data) : null)
                 .message(this.message)
                 .build();
     }
 
-    public static <T> RbApiResponse<T> success(String message, T data) {
+    public static <T> RbApiResponse<T> success(@Nullable String message, @Nullable T data) {
         return RbApiResponse.<T>builder()
                 .success(true)
                 .data(data)
                 .message(message)
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .build();
     }
 }

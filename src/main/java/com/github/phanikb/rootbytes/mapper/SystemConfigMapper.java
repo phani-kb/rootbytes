@@ -6,10 +6,6 @@
 
 package com.github.phanikb.rootbytes.mapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -22,14 +18,9 @@ import com.github.phanikb.rootbytes.entity.SystemConfig;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface SystemConfigMapper {
 
-    @Mapping(target = "updatedAt", expression = "java(map(config.getUpdatedAt()))")
     SystemConfigResponse toResponse(SystemConfig config);
 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "updatedBy", ignore = true)
     SystemConfig toEntity(SystemConfigRequest request);
-
-    default LocalDateTime map(Instant value) {
-        return value == null ? null : LocalDateTime.ofInstant(value, ZoneId.systemDefault());
-    }
 }

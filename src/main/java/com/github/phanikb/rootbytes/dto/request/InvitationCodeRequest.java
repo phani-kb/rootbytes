@@ -19,5 +19,5 @@ import lombok.NoArgsConstructor;
 public class InvitationCodeRequest {
     @NotBlank(message = "Invitee email is required")
     @Email(message = "Valid email is required")
-    private String inviteeEmail;
+    private String inviteeEmail = "";
 }

@@ -9,6 +9,7 @@ package com.github.phanikb.rootbytes.entity;
 import java.time.Instant;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -30,17 +31,19 @@ public abstract class AuditableEntity {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
-    private Instant updatedAt;
+    private Instant updatedAt = Instant.now();
 
     @CreatedBy
     @Column(name = "created_by", updatable = false)
+    @Nullable
     private UUID createdBy;
 
     @LastModifiedBy
     @Column(name = "updated_by")
+    @Nullable
     private UUID updatedBy;
 }

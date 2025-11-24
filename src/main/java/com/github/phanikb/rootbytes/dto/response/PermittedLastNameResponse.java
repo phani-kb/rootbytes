@@ -9,6 +9,9 @@ package com.github.phanikb.rootbytes.dto.response;
 import java.time.Instant;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,11 +23,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PermittedLastNameResponse {
     private UUID id;
+
+    @NotBlank
     private String lastName;
+
+    @Nullable
     private String description;
+
+    @Nullable
     private String category;
+
     private Boolean isActive;
     private Instant createdAt;
+
+    @Nullable
     private Instant updatedAt;
+
     private String aliases; // comma separated aliases
 }

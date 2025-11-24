@@ -28,7 +28,8 @@ public class AuditorAwareImpl implements AuditorAware<UUID> {
         }
 
         if (auth.getPrincipal() instanceof RbUserDetails userDetails) {
-            return Optional.of(userDetails.getId());
+            UUID id = userDetails.getId();
+            return id != null ? Optional.of(id) : Optional.empty();
         }
 
         return Optional.empty();

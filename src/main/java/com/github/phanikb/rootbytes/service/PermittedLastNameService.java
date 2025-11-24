@@ -25,6 +25,7 @@ import com.github.phanikb.rootbytes.exception.DuplicateResourceException;
 import com.github.phanikb.rootbytes.exception.InvalidLastNameException;
 import com.github.phanikb.rootbytes.exception.ResourceNotFoundException;
 import com.github.phanikb.rootbytes.repository.PermittedLastNameRepository;
+import com.github.phanikb.rootbytes.util.RbStringUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -134,7 +135,7 @@ public class PermittedLastNameService {
 
         PermittedLastName existing = getById(id);
 
-        if (!existing.getLastName().equalsIgnoreCase(request.getLastName())
+        if (!RbStringUtil.equalsIgnoreCase(existing.getLastName(), request.getLastName())
                 && validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName())) {
             throw new DuplicateResourceException("PermittedLastName", "lastName", request.getLastName());
         }

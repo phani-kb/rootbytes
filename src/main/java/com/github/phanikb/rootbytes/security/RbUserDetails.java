@@ -11,30 +11,36 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import com.github.phanikb.rootbytes.entity.UserEntity;
 import com.github.phanikb.rootbytes.enums.UserRole;
 import com.github.phanikb.rootbytes.enums.UserStatus;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class RbUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private UUID id;
+
     private String email;
+
+    @Nullable
     private String password;
+
     private UserRole role;
+
     private UserStatus status;
+
     private boolean emailVerified;
 
     public static RbUserDetails fromUser(UserEntity user) {
@@ -49,22 +55,25 @@ public class RbUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (role == null) {
+            return Collections.emptyList();
+        }
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return password != null ? password : "";
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return email != null ? email : "";
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return status != UserStatus.BANNED;
+        return status == null || status != UserStatus.BANNED;
     }
 
     @Override
@@ -76,7 +85,9 @@ public class RbUserDetails implements UserDetails {
         UserEntity user = new UserEntity();
         user.setId(this.id);
         user.setEmail(this.email);
-        user.setPasswordHash(this.password);
+        if (this.password != null) {
+            user.setPasswordHash(this.password);
+        }
         user.setRole(this.role);
         user.setStatus(this.status);
         user.setEmailVerified(this.emailVerified);

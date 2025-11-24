@@ -6,7 +6,7 @@
 
 package com.github.phanikb.rootbytes.service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,8 +58,8 @@ public class UnitServiceTest {
                 .unitType(UnitType.VOLUME)
                 .description("Medium volume measurement")
                 .isActive(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
 
         teaspoon = Unit.builder()
@@ -69,8 +69,8 @@ public class UnitServiceTest {
                 .unitType(UnitType.VOLUME)
                 .description("Small volume measurement")
                 .isActive(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
 
         gram = Unit.builder()
@@ -80,8 +80,8 @@ public class UnitServiceTest {
                 .unitType(UnitType.WEIGHT)
                 .description("Metric weight measurement")
                 .isActive(true)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 
@@ -166,8 +166,8 @@ public class UnitServiceTest {
         when(repository.save(any(Unit.class))).thenAnswer(invocation -> {
             Unit unit = invocation.getArgument(0);
             unit.setId(UUID.randomUUID());
-            unit.setCreatedAt(LocalDateTime.now());
-            unit.setUpdatedAt(LocalDateTime.now());
+            unit.setCreatedAt(Instant.now());
+            unit.setUpdatedAt(Instant.now());
             return unit;
         });
 

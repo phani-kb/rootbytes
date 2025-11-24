@@ -6,6 +6,8 @@
 
 package com.github.phanikb.rootbytes.controller;
 
+import java.util.Objects;
+
 import jakarta.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -42,10 +44,12 @@ public class InvitationCodeController {
     @PreAuthorize(Constants.ADMIN_ROLE)
     public ResponseEntity<RbApiResponse<InvitationCodeResponse>> generateInvitationCode(
             @Valid @RequestBody InvitationCodeRequest request, @RbCurrentUser UserEntity admin) {
+        String inviteeEmail = Objects.requireNonNull(request.getInviteeEmail(), "Invitee email is required");
         log.info("Admin {} is generating invitation code for email: {}", admin.getEmail(), request.getInviteeEmail());
 
-        InvitationCode invitation = invitationCodeService.generateInvitationCode(admin, request.getInviteeEmail());
-        InvitationCodeResponse response = invitationCodeMapper.toResponse(invitation);
+        InvitationCode invitation = invitationCodeService.generateInvitationCode(admin, inviteeEmail);
+        InvitationCodeResponse response = Objects.requireNonNull(
+                invitationCodeMapper.toResponse(invitation), "Failed to map invitation response");
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(RbApiResponse.success("Invitation code generated successfully", response));

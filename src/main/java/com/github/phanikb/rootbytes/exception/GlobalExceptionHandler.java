@@ -6,7 +6,7 @@
 
 package com.github.phanikb.rootbytes.exception;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import org.springframework.web.context.request.WebRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import com.github.phanikb.rootbytes.dto.response.ErrorResponse;
+import com.github.phanikb.rootbytes.util.LogSanitizer;
 import com.github.phanikb.rootbytes.util.RbUtil;
 
 @RestControllerAdvice
@@ -26,9 +27,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, WebRequest request) {
-        log.error("Unhandled exception: {}", ex.getMessage());
+        log.error("Unhandled exception: {}", LogSanitizer.sanitize(ex));
+
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .message("An unexpected error occurred. Please try again later.")
@@ -39,12 +41,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RbException.class)
     public ResponseEntity<ErrorResponse> handleRbException(RbException ex, WebRequest request) {
-        log.error("RbException: {}", ex.getMessage());
+        log.error("RbException: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "An error occurred";
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(message)
                 .path(RbUtil.getPath(request))
                 .build();
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -53,14 +57,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex, WebRequest request) {
-        log.error("Validation error: {}", ex.getMessage());
+        log.error("Validation error: {}", LogSanitizer.sanitize(ex));
+
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .findFirst()
                 .orElse("Validation failed");
 
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message(message)
@@ -72,12 +77,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
-        log.error("Resource not found error: {}", ex.getMessage());
+        log.error("Resource not found error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Resource not found";
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.NOT_FOUND.value())
                 .error(HttpStatus.NOT_FOUND.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(message)
                 .path(RbUtil.getPath(request))
                 .build();
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -86,12 +93,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateResourceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateResourceException(
             DuplicateResourceException ex, WebRequest request) {
-        log.error("Duplicate resource error: {}", ex.getMessage());
+        log.error("Duplicate resource error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Duplicate resource error";
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(message)
                 .path(RbUtil.getPath(request))
                 .build();
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -100,12 +109,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidInvitationException.class)
     public ResponseEntity<ErrorResponse> handleInvalidInvitationException(
             InvalidInvitationException ex, WebRequest request) {
-        log.error("Invalid invitation error: {}", ex.getMessage());
+        log.error("Invalid invitation error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Invalid invitation";
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(message)
                 .path(RbUtil.getPath(request))
                 .build();
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -114,13 +125,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidLastNameException.class)
     public ResponseEntity<ErrorResponse> handleInvalidLastNameException(
             InvalidLastNameException ex, WebRequest request) {
-        log.warn("Invalid last name: {}", ex.getMessage());
+        log.warn("Invalid last name: {}", LogSanitizer.sanitize(ex));
 
+        String message = ex.getMessage() != null ? ex.getMessage() : "Invalid last name";
         ErrorResponse error = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(ex.getMessage())
+                .message(message)
                 .path(RbUtil.getPath(request))
                 .build();
 

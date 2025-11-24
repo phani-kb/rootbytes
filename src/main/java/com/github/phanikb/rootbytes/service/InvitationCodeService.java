@@ -8,7 +8,6 @@ package com.github.phanikb.rootbytes.service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -22,6 +21,7 @@ import com.github.phanikb.rootbytes.entity.InvitationCode;
 import com.github.phanikb.rootbytes.entity.UserEntity;
 import com.github.phanikb.rootbytes.exception.InvalidInvitationException;
 import com.github.phanikb.rootbytes.repository.InvitationCodeRepository;
+import com.github.phanikb.rootbytes.util.RbStringUtil;
 
 @Slf4j
 @Service
@@ -87,6 +87,6 @@ public class InvitationCodeService {
                 .toString()
                 .replaceAll("-", "")
                 .substring(0, Math.min(Constants.INVITATION_CODE_LENGTH, Constants.MAX_INVITATION_CODE_LENGTH))
-                .toUpperCase(Locale.ROOT);
+                .toUpperCase(RbStringUtil.ROOT_LOCALE);
     }
 }

@@ -6,8 +6,10 @@
 
 package com.github.phanikb.rootbytes.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
+
+import jakarta.annotation.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +25,17 @@ import com.github.phanikb.rootbytes.enums.UnitType;
 public class UnitResponse {
     private UUID id;
     private String name;
+
     private String abbreviation;
+
     private UnitType unitType;
+
+    @Nullable
     private String description;
+
     private Boolean isActive;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
 }

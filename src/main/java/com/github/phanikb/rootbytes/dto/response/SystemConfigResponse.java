@@ -6,7 +6,9 @@
 
 package com.github.phanikb.rootbytes.dto.response;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+
+import jakarta.annotation.Nullable;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,8 +27,10 @@ public class SystemConfigResponse {
 
     private String keyValue;
 
+    @Nullable
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime updatedAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    @Nullable
+    private Instant updatedAt;
 }

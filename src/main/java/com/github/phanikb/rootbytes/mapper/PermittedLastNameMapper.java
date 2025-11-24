@@ -28,7 +28,7 @@ public interface PermittedLastNameMapper {
     @Named("aliasesToString")
     default String aliasesToString(List<LastNameAlias> aliases) {
         if (aliases == null || aliases.isEmpty()) {
-            return null;
+            return "";
         }
         return aliases.stream().map(LastNameAlias::getAlias).collect(Collectors.joining(", "));
     }

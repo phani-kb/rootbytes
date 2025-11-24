@@ -6,7 +6,7 @@
 
 package com.github.phanikb.rootbytes.controller;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +70,7 @@ class SystemConfigControllerTest {
                 .keyName("test.key")
                 .keyValue("test-value")
                 .description("Test configuration")
-                .updatedAt(LocalDateTime.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 

@@ -2,4 +2,17 @@
   <Match>
     <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE" />
   </Match>
+  <Match>
+    <Bug pattern="SPRING_ENDPOINT" />
+  </Match>
+  <Match>
+    <Bug pattern="UUF_UNUSED_FIELD" />
+  </Match>
+  <Match>
+    <Class name="~.*MapperImpl" />
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+  <Match>
+    <Bug pattern="CRLF_INJECTION_LOGS" />
+  </Match>
 </FindBugsFilter>

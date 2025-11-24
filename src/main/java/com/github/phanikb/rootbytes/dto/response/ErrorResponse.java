@@ -28,7 +28,7 @@ public class ErrorResponse {
     private String path;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd'T'HH:mm:ss")
-    private java.time.LocalDateTime timestamp;
+    private java.time.Instant timestamp;
 
     private Map<String, String> validationErrors;
 }
