@@ -126,6 +126,62 @@ create index idx_units_is_active on units (is_active);
 
 create index idx_units_name on units (name);
 
+-- Notifications table
+create table if not exists notifications (
+    id uuid default random_uuid () primary key,
+    user_id uuid not null,
+    type VARCHAR(50) not null,
+    title VARCHAR(200) not null,
+    message CLOB not null,
+    data CLOB,
+    status VARCHAR(20) not null default 'UNREAD',
+    created_at TIMESTAMP not null default current_timestamp,
+    read_at TIMESTAMP,
+    constraint chk_notification_status check (status in ('UNREAD', 'READ', 'ARCHIVED')),
+    foreign key (user_id) references users (id) on delete cascade
+);
+
+create index idx_notifications_user on notifications (user_id);
+
+create index idx_notifications_status on notifications (status);
+
+create index idx_notifications_created_at on notifications (created_at);
+
+-- Notification Preferences table
+create table notification_preferences (
+    user_id uuid primary key,
+    email_enabled BOOLEAN not null default false,
+    sms_enabled BOOLEAN not null default false,
+    frequency VARCHAR(20) not null default 'INSTANT',
+    quiet_hours_start TIME,
+    quiet_hours_end TIME,
+    subscribed_events CLOB,
+    updated_at TIMESTAMP not null default current_timestamp,
+    constraint chk_frequency check (frequency in ('INSTANT', 'DAILY_DIGEST', 'WEEKLY_DIGEST')),
+    foreign key (user_id) references users (id) on delete cascade
+);
+
+create index idx_notification_preferences_user on notification_preferences (user_id);
+
+-- Audit Logs table
+create table if not exists audit_logs (
+    id uuid default random_uuid () primary key,
+    user_id uuid not null,
+    action VARCHAR(100) not null,
+    entity_type VARCHAR(50) not null,
+    entity_id uuid,
+    changes CLOB,
+    ip_address VARCHAR(45),
+    created_at TIMESTAMP not null default current_timestamp,
+    foreign key (user_id) references users (id)
+);
+
+create index idx_audit_logs_user on audit_logs (user_id);
+
+create index idx_audit_logs_entity on audit_logs (entity_type, entity_id);
+
+create index idx_audit_logs_created_at on audit_logs (created_at);
+
 -- System Configuration table
 create table system_config (
     key_name VARCHAR(100) primary key not null,

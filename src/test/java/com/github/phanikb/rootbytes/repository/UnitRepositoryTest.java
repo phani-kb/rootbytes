@@ -41,41 +41,15 @@ class UnitRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        activeVolumeUnit = Unit.builder()
-                .name("Liter")
-                .abbreviation("L")
-                .unitType(UnitType.VOLUME)
-                .description("Metric large volume measurement")
-                .isActive(true)
-                .build();
-        activeVolumeUnit = repository.saveAndFlush(activeVolumeUnit);
+        activeVolumeUnit = repository
+                .findByName("Liter")
+                .orElseThrow(() -> new IllegalStateException("Liter unit not found in test data"));
 
-        Unit inactiveVolumeUnit = Unit.builder()
-                .name("Gallon")
-                .abbreviation("gal")
-                .unitType(UnitType.VOLUME)
-                .description("Imperial large volume measurement")
-                .isActive(false)
-                .build();
-        repository.saveAndFlush(inactiveVolumeUnit);
-
-        Unit milliliter = Unit.builder()
-                .name("Milliliter")
-                .abbreviation("ml")
-                .unitType(UnitType.VOLUME)
-                .description("Metric small volume measurement")
-                .isActive(true)
-                .build();
-        repository.saveAndFlush(milliliter);
-
-        Unit gram = Unit.builder()
-                .name("Gram")
-                .abbreviation("g")
-                .unitType(UnitType.WEIGHT)
-                .description("Metric small weight measurement")
-                .isActive(true)
-                .build();
-        repository.saveAndFlush(gram);
+        Unit gallon = repository
+                .findByName("Gallon")
+                .orElseThrow(() -> new IllegalStateException("Gallon unit not found in test data"));
+        gallon.setActive(false);
+        repository.saveAndFlush(gallon);
 
         entityManager.clear();
     }

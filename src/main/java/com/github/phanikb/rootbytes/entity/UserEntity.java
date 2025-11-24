@@ -9,6 +9,7 @@ package com.github.phanikb.rootbytes.entity;
 import java.time.Instant;
 import java.util.UUID;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -59,6 +60,7 @@ public class UserEntity {
     private String uniqueName;
 
     @Column(name = "public_name", length = 100)
+    @Nullable
     private String publicName;
 
     @Column(name = "password_hash")
