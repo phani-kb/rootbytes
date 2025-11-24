@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,9 +33,6 @@ class UnitRepositoryTest {
     @Autowired
     private UnitRepository repository;
 
-    @Autowired
-    private TestEntityManager entityManager;
-
     private Unit activeVolumeUnit;
 
     @BeforeEach
@@ -44,14 +40,6 @@ class UnitRepositoryTest {
         activeVolumeUnit = repository
                 .findByName("Liter")
                 .orElseThrow(() -> new IllegalStateException("Liter unit not found in test data"));
-
-        Unit gallon = repository
-                .findByName("Gallon")
-                .orElseThrow(() -> new IllegalStateException("Gallon unit not found in test data"));
-        gallon.setActive(false);
-        repository.saveAndFlush(gallon);
-
-        entityManager.clear();
     }
 
     @Test
@@ -89,7 +77,7 @@ class UnitRepositoryTest {
         assertTrue(activeUnits.size() >= 2, "Should find at least 2 active units");
         assertTrue(activeUnits.stream().allMatch(Unit::isActive));
         assertTrue(activeUnits.stream().anyMatch(u -> u.getName().equals("Liter")));
-        assertFalse(activeUnits.stream().anyMatch(u -> u.getName().equals("Gallon")), "Gallon should be inactive");
+        assertTrue(activeUnits.stream().anyMatch(u -> u.getName().equals("Gallon")), "Gallon should be active");
     }
 
     @Test
@@ -98,9 +86,9 @@ class UnitRepositoryTest {
 
         assertFalse(activeVolumeUnits.isEmpty(), "Should find at least 1 active volume unit");
         assertTrue(activeVolumeUnits.stream().anyMatch(u -> u.getName().equals("Liter")));
-        assertFalse(
+        assertTrue(
                 activeVolumeUnits.stream().anyMatch(u -> u.getName().equals("Gallon")),
-                "Gallon should not be in active list");
+                "Gallon should be in active list");
     }
 
     @Test

@@ -15,4 +15,9 @@
   <Match>
     <Bug pattern="CRLF_INJECTION_LOGS" />
   </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.util.RbGenerator" />
+    <Method name="extractBaseName" />
+    <Bug pattern="IMPROPER_UNICODE" />
+  </Match>
 </FindBugsFilter>

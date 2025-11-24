@@ -67,3 +67,9 @@ values
     ('Singh', 'Common Indian surname', 'INDIAN', true),
     ('Williams', 'Common English surname', 'COMMON', true),
     ('Smith', 'Common English surname', 'COMMON', true);
+
+delete from lastname_aliases;
+
+insert into
+    lastname_aliases (permitted_lastname_id, alias)
+select id, 'Kumari' from permitted_lastnames where last_name = 'Kumar';

@@ -9,6 +9,8 @@ package com.github.phanikb.rootbytes.util;
 import java.text.Collator;
 import java.util.Locale;
 
+import jakarta.annotation.Nullable;
+
 public final class RbStringUtil {
 
     public static final Locale ROOT_LOCALE = Locale.ROOT;
@@ -47,5 +49,21 @@ public final class RbStringUtil {
         }
 
         return ROOT_COLLATOR.compare(str1, str2);
+    }
+
+    @Nullable
+    public static String toLowerCase(@Nullable String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.toLowerCase(ROOT_LOCALE);
+    }
+
+    @Nullable
+    public static String toUpperCase(@Nullable String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.toUpperCase(ROOT_LOCALE);
     }
 }
