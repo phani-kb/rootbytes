@@ -23,6 +23,7 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
@@ -30,7 +31,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.enums.NotificationStatus;
+import com.github.phanikb.rootbytes.enums.notification.NotificationPriority;
+import com.github.phanikb.rootbytes.enums.notification.NotificationStatus;
+import com.github.phanikb.rootbytes.enums.notification.NotificationType;
 
 @Entity
 @Table(name = "notifications")
@@ -48,8 +51,9 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private String type;
+    private NotificationType type;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -67,9 +71,24 @@ public class Notification {
     @Builder.Default
     private NotificationStatus status = NotificationStatus.UNREAD;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private NotificationPriority priority = NotificationPriority.MEDIUM;
+
+    @Column(name = "action_url", length = 500)
+    private String actionUrl;
+
     @Column(name = "created_at", nullable = false, updatable = false)
+    @CreatedDate
     private Instant createdAt;
 
     @Column(name = "read_at")
     private Instant readAt;
+
+    @Column(name = "archived_at")
+    private Instant archivedAt;
+
+    @Column(name = "expires_at")
+    private Instant expiresAt;
 }

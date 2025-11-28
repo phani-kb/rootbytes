@@ -65,3 +65,22 @@ rootbytes:
     specs:
       default: "maximumSize=100,expireAfterAccess=60m"
       systemConfig: "maximumSize=50,expireAfterAccess=10m"
+  notification:
+    archive:
+      read-after-days: 30
+      delete-after-days: 90
+    email:
+      enabled: false
+      from-address: "${EMAIL_FROM_ADDRESS}"
+    queue:
+      enabled: false
+      batch-size: 10
+      retry-interval-minutes: 5
+      max-attempts: 3
+      max-per-user: 30
+      processing-interval-minutes: 15
+    digest:
+      enabled: false
+      daily-hour: 6
+      weekly-day: SUNDAY
+      weekly-hour: 6

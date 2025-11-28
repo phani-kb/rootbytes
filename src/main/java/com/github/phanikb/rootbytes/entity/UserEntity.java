@@ -30,7 +30,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.config.converter.UpperCaseConverter;
+import com.github.phanikb.rootbytes.converter.UpperCaseConverter;
 import com.github.phanikb.rootbytes.enums.UserRole;
 import com.github.phanikb.rootbytes.enums.UserStatus;
 

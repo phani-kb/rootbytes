@@ -4,10 +4,10 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.enums;
+package com.github.phanikb.rootbytes.enums.notification;
 
-public enum NotificationStatus {
-    UNREAD,
-    READ,
-    ARCHIVED
+public enum NotificationChannel {
+    EMAIL,
+    SMS,
+    IN_APP
 }

@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.config.converter;
+package com.github.phanikb.rootbytes.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

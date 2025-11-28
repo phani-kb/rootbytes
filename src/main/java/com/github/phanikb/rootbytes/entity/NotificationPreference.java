@@ -8,9 +8,12 @@ package com.github.phanikb.rootbytes.entity;
 
 import java.time.Instant;
 import java.time.LocalTime;
+import java.util.EnumSet;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -31,7 +34,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.enums.NotificationFrequency;
+import com.github.phanikb.rootbytes.converter.NotificationTypeSetConverter;
+import com.github.phanikb.rootbytes.enums.notification.NotificationFrequency;
+import com.github.phanikb.rootbytes.enums.notification.NotificationType;
 
 @Entity
 @Table(name = "notification_preferences")
@@ -70,7 +75,9 @@ public class NotificationPreference {
 
     @Lob
     @Column(name = "subscribed_events", columnDefinition = "TEXT")
-    private String subscribedEvents;
+    @Convert(converter = NotificationTypeSetConverter.class)
+    @Builder.Default
+    private Set<NotificationType> subscribedEvents = EnumSet.noneOf(NotificationType.class);
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
