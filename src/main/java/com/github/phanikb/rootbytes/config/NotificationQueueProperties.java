@@ -42,8 +42,4 @@ public class NotificationQueueProperties {
     @Min(5)
     @Max(60)
     private int processingIntervalMinutes = 15;
-
-    public int getProcessingIntervalMinutes() {
-        return processingIntervalMinutes > 0 ? processingIntervalMinutes : 15;
-    }
 }

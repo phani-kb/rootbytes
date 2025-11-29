@@ -56,10 +56,6 @@ public enum NotificationType {
         this.subscribable = subscribable;
     }
 
-    public boolean isDigestible() {
-        return digestible;
-    }
-
     public static NotificationType fromString(String typeStr) {
         if (typeStr == null || typeStr.isBlank()) {
             return GENERAL;

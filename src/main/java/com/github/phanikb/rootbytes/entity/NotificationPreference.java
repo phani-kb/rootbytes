@@ -26,6 +26,7 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -67,9 +68,11 @@ public class NotificationPreference {
     @Builder.Default
     private NotificationFrequency frequency = NotificationFrequency.INSTANT;
 
+    @Nullable
     @Column(name = "quiet_hours_start")
     private LocalTime quietHoursStart;
 
+    @Nullable
     @Column(name = "quiet_hours_end")
     private LocalTime quietHoursEnd;
 
