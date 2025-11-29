@@ -104,12 +104,12 @@ public class NotificationSchedulingService {
 
     private int resolveDailyDigestHour() {
         return sanitizeHour(
-                notificationDigestProperties.getDailyHour(), NotificationDigestProperties.DigestDefaults.hour);
+                notificationDigestProperties.getDailyHour(), NotificationDigestProperties.DigestDefaults.HOUR);
     }
 
     private DayOfWeek resolveWeeklyDigestDay() {
         if (!notificationDigestProperties.isEnabled() || notificationDigestProperties.getWeeklyDay() == null) {
-            return DayOfWeek.MONDAY;
+            return NotificationDigestProperties.DigestDefaults.WEEKLY_DAY;
         }
         return notificationDigestProperties.getWeeklyDay();
     }
@@ -117,8 +117,8 @@ public class NotificationSchedulingService {
     private int resolveWeeklyDigestHour() {
         int configured = notificationDigestProperties.isEnabled()
                 ? notificationDigestProperties.getWeeklyHour()
-                : NotificationDigestProperties.DigestDefaults.hour;
-        return sanitizeHour(configured, NotificationDigestProperties.DigestDefaults.hour);
+                : NotificationDigestProperties.DigestDefaults.HOUR;
+        return sanitizeHour(configured, NotificationDigestProperties.DigestDefaults.HOUR);
     }
 
     private int sanitizeHour(int hour, int fallback) {

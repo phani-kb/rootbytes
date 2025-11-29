@@ -43,9 +43,11 @@ public class NotificationDigestProperties {
     @Max(23)
     private int monthlyHour = 6;
 
-    public static class DigestDefaults {
-        public static int hour = 8;
-        public static int minute = 0;
-        public static DayOfWeek weeklyDay = DayOfWeek.MONDAY;
+    public static final class DigestDefaults {
+        public static final int HOUR = 8;
+        public static final int MINUTE = 0;
+        public static final DayOfWeek WEEKLY_DAY = DayOfWeek.MONDAY;
+
+        private DigestDefaults() {}
     }
 }
