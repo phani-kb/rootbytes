@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.dto.request;
+package com.github.phanikb.rootbytes.dto.v1.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

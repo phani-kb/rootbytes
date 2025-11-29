@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.github.phanikb.rootbytes.dto.request.UnitRequest;
+import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;

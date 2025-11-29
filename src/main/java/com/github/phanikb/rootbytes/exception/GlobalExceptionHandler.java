@@ -17,7 +17,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.github.phanikb.rootbytes.dto.response.ErrorResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.ErrorResponse;
 import com.github.phanikb.rootbytes.util.LogSanitizer;
 import com.github.phanikb.rootbytes.util.RbUtil;
 
@@ -137,5 +137,38 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotificationQueueDisabledException.class)
+    public ResponseEntity<ErrorResponse> handleNotificationQueueDisabledException(
+            NotificationQueueDisabledException ex, WebRequest request) {
+        log.error("Notification queue disabled error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Notification queue is disabled";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(NotificationQueueLimitException.class)
+    public ResponseEntity<ErrorResponse> handleNotificationQueueLimitException(
+            NotificationQueueLimitException ex, WebRequest request) {
+        log.error("Notification queue limit exceeded: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Notification queue limit exceeded";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
 }

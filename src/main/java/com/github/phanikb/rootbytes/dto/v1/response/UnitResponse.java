@@ -4,40 +4,38 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.dto.response;
+package com.github.phanikb.rootbytes.dto.v1.response;
 
 import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import com.github.phanikb.rootbytes.enums.UnitType;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PermittedLastNameResponse {
+public class UnitResponse {
     private UUID id;
+    private String name;
 
-    @NotBlank
-    private String lastName;
+    private String abbreviation;
+
+    private UnitType unitType;
 
     @Nullable
     private String description;
 
-    @Nullable
-    private String category;
-
     private Boolean isActive;
+
     private Instant createdAt;
 
-    @Nullable
     private Instant updatedAt;
-
-    private String aliases; // comma separated aliases
 }

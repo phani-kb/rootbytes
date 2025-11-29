@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.util.Objects;
 
@@ -22,9 +22,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import com.github.phanikb.rootbytes.common.Constants;
-import com.github.phanikb.rootbytes.dto.request.InvitationCodeRequest;
-import com.github.phanikb.rootbytes.dto.response.InvitationCodeResponse;
-import com.github.phanikb.rootbytes.dto.response.RbApiResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.InvitationCodeRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.InvitationCodeResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
 import com.github.phanikb.rootbytes.entity.InvitationCode;
 import com.github.phanikb.rootbytes.entity.UserEntity;
 import com.github.phanikb.rootbytes.mapper.InvitationCodeMapper;
@@ -33,7 +33,7 @@ import com.github.phanikb.rootbytes.service.InvitationCodeService;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/invitations")
+@RequestMapping(Constants.API_V1 + "/invitations")
 @RequiredArgsConstructor
 public class InvitationCodeController {
 

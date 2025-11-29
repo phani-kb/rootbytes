@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.phanikb.rootbytes.dto.request.UnitRequest;
+import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;

@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.dto.response;
+package com.github.phanikb.rootbytes.dto.v1.response;
 
 import java.time.Instant;
 import java.util.function.Function;

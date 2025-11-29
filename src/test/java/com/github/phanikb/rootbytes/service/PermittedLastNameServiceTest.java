@@ -21,7 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import com.github.phanikb.rootbytes.dto.request.PermittedLastNameRequest;
+import com.github.phanikb.rootbytes.dto.v1.request.PermittedLastNameRequest;
 import com.github.phanikb.rootbytes.entity.PermittedLastName;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;
 import com.github.phanikb.rootbytes.exception.InvalidLastNameException;

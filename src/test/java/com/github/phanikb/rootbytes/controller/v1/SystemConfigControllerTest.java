@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -18,8 +18,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.phanikb.rootbytes.dto.request.SystemConfigRequest;
-import com.github.phanikb.rootbytes.dto.response.SystemConfigResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.SystemConfigRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.SystemConfigResponse;
 import com.github.phanikb.rootbytes.entity.SystemConfig;
 import com.github.phanikb.rootbytes.entity.UserEntity;
 import com.github.phanikb.rootbytes.enums.UserRole;

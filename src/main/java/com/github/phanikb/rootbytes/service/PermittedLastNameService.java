@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.github.phanikb.rootbytes.dto.request.PermittedLastNameRequest;
+import com.github.phanikb.rootbytes.dto.v1.request.PermittedLastNameRequest;
 import com.github.phanikb.rootbytes.entity.LastNameAlias;
 import com.github.phanikb.rootbytes.entity.PermittedLastName;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;

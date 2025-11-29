@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-import com.github.phanikb.rootbytes.dto.response.UserResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.UserResponse;
 import com.github.phanikb.rootbytes.entity.UserEntity;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)

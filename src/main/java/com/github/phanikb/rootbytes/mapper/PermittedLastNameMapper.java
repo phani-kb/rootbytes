@@ -15,7 +15,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import com.github.phanikb.rootbytes.dto.response.PermittedLastNameResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.PermittedLastNameResponse;
 import com.github.phanikb.rootbytes.entity.LastNameAlias;
 import com.github.phanikb.rootbytes.entity.PermittedLastName;
 

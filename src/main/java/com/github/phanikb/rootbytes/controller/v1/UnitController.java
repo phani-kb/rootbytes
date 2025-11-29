@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,16 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.github.phanikb.rootbytes.common.Constants;
-import com.github.phanikb.rootbytes.dto.request.UnitRequest;
-import com.github.phanikb.rootbytes.dto.response.RbApiResponse;
-import com.github.phanikb.rootbytes.dto.response.UnitResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.UnitResponse;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.mapper.UnitMapper;
 import com.github.phanikb.rootbytes.service.UnitService;
 
 @RestController
-@RequestMapping("/api/units")
+@RequestMapping(Constants.API_V1 + "/units")
 @RequiredArgsConstructor
 public class UnitController {
 

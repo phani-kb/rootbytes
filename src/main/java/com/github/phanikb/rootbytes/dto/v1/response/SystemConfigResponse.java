@@ -4,10 +4,9 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.dto.response;
+package com.github.phanikb.rootbytes.dto.v1.response;
 
 import java.time.Instant;
-import java.util.UUID;
 
 import jakarta.annotation.Nullable;
 
@@ -16,26 +15,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.enums.UnitType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UnitResponse {
-    private UUID id;
-    private String name;
+public class SystemConfigResponse {
 
-    private String abbreviation;
+    private String keyName;
 
-    private UnitType unitType;
+    private String keyValue;
 
     @Nullable
     private String description;
 
-    private Boolean isActive;
-
-    private Instant createdAt;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    @Nullable
     private Instant updatedAt;
 }

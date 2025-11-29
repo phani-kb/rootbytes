@@ -9,5 +9,6 @@ package com.github.phanikb.rootbytes.enums.notification;
 public enum NotificationFrequency {
     INSTANT,
     DAILY_DIGEST,
-    WEEKLY_DIGEST
+    WEEKLY_DIGEST,
+    MONTHLY_DIGEST
 }

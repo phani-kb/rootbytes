@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +21,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import com.github.phanikb.rootbytes.dto.request.PermittedLastNameRequest;
-import com.github.phanikb.rootbytes.dto.response.PermittedLastNameResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.PermittedLastNameRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.PermittedLastNameResponse;
 import com.github.phanikb.rootbytes.entity.LastNameAlias;
 import com.github.phanikb.rootbytes.entity.PermittedLastName;
 import com.github.phanikb.rootbytes.mapper.PermittedLastNameMapper;

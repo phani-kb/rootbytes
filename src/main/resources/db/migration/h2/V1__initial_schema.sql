@@ -135,9 +135,13 @@ create table if not exists notifications (
     message CLOB not null,
     data CLOB,
     status VARCHAR(20) not null default 'UNREAD',
+    priority VARCHAR(20) not null default 'MEDIUM',
     created_at TIMESTAMP not null default current_timestamp,
     read_at TIMESTAMP,
-    constraint chk_notification_status check (status in ('UNREAD', 'READ', 'ARCHIVED')),
+    archived_at TIMESTAMP,
+    expires_at TIMESTAMP,
+    constraint chk_notification_status check (status in ('UNREAD', 'READ', 'ARCHIVED', 'DELETED')),
+    constraint chk_notification_priority check (priority in ('CRITICAL', 'HIGH', 'MEDIUM', 'LOW')),
     foreign key (user_id) references users (id) on delete cascade
 );
 
@@ -162,6 +166,55 @@ create table notification_preferences (
 );
 
 create index idx_notification_preferences_user on notification_preferences (user_id);
+
+-- Notification metadata table
+create table if not exists notification_metadata (
+    id uuid default random_uuid () primary key,
+    notification_id uuid not null,
+    entity_type VARCHAR(50) not null,
+    entity_id uuid,
+    action_url VARCHAR(500),
+    foreign key (notification_id) references notifications (id) on delete cascade
+);
+
+create index idx_notification_metadata_notification on notification_metadata (notification_id);
+
+create index idx_notification_metadata_entity on notification_metadata (entity_type, entity_id);
+
+-- Notification Queue table
+create table if not exists notification_queue (
+    id uuid default random_uuid () primary key,
+    user_id uuid not null,
+    notification_type VARCHAR(50) not null,
+    title VARCHAR(200) not null,
+    message text not null,
+    data text,
+    action_url VARCHAR(500),
+    priority VARCHAR(20) not null default 'MEDIUM',
+    channel VARCHAR(20) not null,
+    scheduled_for TIMESTAMP not null default current_timestamp,
+    status VARCHAR(20) not null default 'PENDING',
+    attempts INT not null default 0,
+    max_attempts INT not null default 3,
+    last_attempt_at TIMESTAMP,
+    error_message text,
+    created_at TIMESTAMP not null default current_timestamp,
+    processed_at TIMESTAMP,
+    constraint chk_queue_status check (status in ('PENDING', 'PROCESSING', 'SENT', 'FAILED', 'CANCELLED')),
+    constraint chk_queue_channel check (channel in ('EMAIL', 'SMS', 'IN_APP')),
+    constraint chk_queue_priority check (priority in ('CRITICAL', 'HIGH', 'MEDIUM', 'LOW')),
+    foreign key (user_id) references users (id) on delete cascade
+);
+
+create index idx_queue_user on notification_queue (user_id);
+
+create index idx_queue_status on notification_queue (status);
+
+create index idx_queue_scheduled on notification_queue (scheduled_for);
+
+create index idx_queue_status_scheduled on notification_queue (status, scheduled_for);
+
+create index idx_queue_channel on notification_queue (channel);
 
 -- Audit Logs table
 create table if not exists audit_logs (

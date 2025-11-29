@@ -11,8 +11,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-import com.github.phanikb.rootbytes.dto.request.UnitRequest;
-import com.github.phanikb.rootbytes.dto.response.UnitResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.UnitResponse;
 import com.github.phanikb.rootbytes.entity.Unit;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)

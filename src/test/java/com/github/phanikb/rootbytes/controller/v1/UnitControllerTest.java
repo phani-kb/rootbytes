@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.phanikb.rootbytes.dto.request.UnitRequest;
-import com.github.phanikb.rootbytes.dto.response.UnitResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.UnitResponse;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.mapper.UnitMapper;

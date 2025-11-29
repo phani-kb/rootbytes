@@ -31,7 +31,7 @@ public class NotificationTypeSetConverter implements AttributeConverter<Set<Noti
         if (attribute == null || attribute.isEmpty()) {
             return null;
         }
-        EnumSet<NotificationType> subscribableOnly = attribute.stream()
+        Set<NotificationType> subscribableOnly = attribute.stream()
                 .filter(NotificationType::isSubscribable)
                 .collect(Collectors.toCollection(() -> EnumSet.noneOf(NotificationType.class)));
 
@@ -44,7 +44,7 @@ public class NotificationTypeSetConverter implements AttributeConverter<Set<Noti
 
     @Override
     public Set<NotificationType> convertToEntityAttribute(String dbData) {
-        EnumSet<NotificationType> events = EnumSet.noneOf(NotificationType.class);
+        Set<NotificationType> events = EnumSet.noneOf(NotificationType.class);
         if (dbData == null || dbData.isBlank()) {
             return events;
         }

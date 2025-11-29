@@ -4,33 +4,40 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.dto.response;
+package com.github.phanikb.rootbytes.dto.v1.response;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SystemConfigResponse {
+public class PermittedLastNameResponse {
+    private UUID id;
 
-    private String keyName;
-
-    private String keyValue;
+    @NotBlank
+    private String lastName;
 
     @Nullable
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "UTC")
+    @Nullable
+    private String category;
+
+    private Boolean isActive;
+    private Instant createdAt;
+
     @Nullable
     private Instant updatedAt;
+
+    private String aliases; // comma separated aliases
 }

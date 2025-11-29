@@ -84,3 +84,5 @@ rootbytes:
       daily-hour: 6
       weekly-day: SUNDAY
       weekly-hour: 6
+      monthly-day: 1
+      monthly-hour: 6

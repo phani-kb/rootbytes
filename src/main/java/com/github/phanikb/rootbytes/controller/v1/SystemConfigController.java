@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.controller;
+package com.github.phanikb.rootbytes.controller.v1;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,16 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 import com.github.phanikb.rootbytes.common.Constants;
-import com.github.phanikb.rootbytes.dto.request.SystemConfigRequest;
-import com.github.phanikb.rootbytes.dto.response.RbApiResponse;
-import com.github.phanikb.rootbytes.dto.response.SystemConfigResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.SystemConfigRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
+import com.github.phanikb.rootbytes.dto.v1.response.SystemConfigResponse;
 import com.github.phanikb.rootbytes.entity.SystemConfig;
 import com.github.phanikb.rootbytes.security.RbCurrentUser;
 import com.github.phanikb.rootbytes.security.RbUserDetails;
 import com.github.phanikb.rootbytes.service.SystemConfigService;
 
 @RestController
-@RequestMapping("/api/rbconfig")
+@RequestMapping(Constants.API_V1 + "/rbconfig")
 @RequiredArgsConstructor
 public class SystemConfigController {
 
