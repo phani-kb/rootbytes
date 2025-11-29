@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import com.github.phanikb.rootbytes.entity.Notification;
 import com.github.phanikb.rootbytes.entity.UserEntity;
+import com.github.phanikb.rootbytes.enums.notification.NotificationStatus;
 import com.github.phanikb.rootbytes.repository.NotificationRepository;
 
 @Slf4j
@@ -29,9 +30,8 @@ public class NotificationService {
 
         Notification notification = Notification.builder()
                 .user(user)
-                .type(type)
                 .message(message)
-                .status(com.github.phanikb.rootbytes.enums.NotificationStatus.UNREAD)
+                .status(NotificationStatus.UNREAD)
                 .build();
 
         return notificationRepository.save(notification);

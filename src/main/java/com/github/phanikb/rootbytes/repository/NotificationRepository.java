@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.github.phanikb.rootbytes.entity.Notification;
 import com.github.phanikb.rootbytes.entity.UserEntity;
-import com.github.phanikb.rootbytes.enums.NotificationStatus;
+import com.github.phanikb.rootbytes.enums.notification.NotificationStatus;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
