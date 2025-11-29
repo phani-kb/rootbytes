@@ -9,12 +9,14 @@ package com.github.phanikb.rootbytes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.github.phanikb.rootbytes.common.Constants;
 import com.github.phanikb.rootbytes.util.RbUtil;
 
 @SuppressWarnings("PMD.UseUtilityClass")
 @EnableConfigurationProperties
+@EnableScheduling
 @SpringBootApplication
 public class RootBytesApplication {
     public static void main(String[] args) {

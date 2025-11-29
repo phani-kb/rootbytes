@@ -9,6 +9,7 @@ package com.github.phanikb.rootbytes.service;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -150,24 +151,27 @@ public class NotificationQueueService {
         List<NotificationQueue> candidates =
                 queueRepository.findByStatusAndLastAttemptAtBefore(QueueStatus.FAILED, retryAfter, pageable);
 
-        int requeued = 0;
-        Instant now = Instant.now();
-        for (NotificationQueue queue : candidates) {
-            int attempts = queue.getAttempts() == null ? 0 : queue.getAttempts();
-            int allowedAttempts =
-                    queue.getMaxAttempts() == null ? queueProperties.getMaxAttempts() : queue.getMaxAttempts();
-            if (attempts >= allowedAttempts) {
-                continue;
-            }
-            queue.setStatus(QueueStatus.PENDING);
-            queue.setScheduledFor(now);
-            queue.resetLastAttemptAt();
-            queue.resetErrorMessage();
-            requeued++;
-        }
+        List<NotificationQueue> toRequeue = candidates.stream()
+                .filter(this::isEligibleForRetry)
+                .peek(this::resetForRetry)
+                .toList();
+
         queueRepository.saveAll(candidates);
-        log.info("Requeued {} failed notifications for retry", requeued);
-        return requeued;
+        log.info("Requeued {} failed notifications for retry", toRequeue.size());
+        return toRequeue.size();
+    }
+
+    private boolean isEligibleForRetry(NotificationQueue queue) {
+        int attempts = Optional.ofNullable(queue.getAttempts()).orElse(0);
+        int maxAttempts = Optional.ofNullable(queue.getMaxAttempts()).orElse(queueProperties.getMaxAttempts());
+        return attempts < maxAttempts;
+    }
+
+    private void resetForRetry(NotificationQueue queue) {
+        queue.setStatus(QueueStatus.PENDING);
+        queue.setScheduledFor(Instant.now());
+        queue.resetLastAttemptAt();
+        queue.resetErrorMessage();
     }
 
     private void ensureQueueEnabled() {
