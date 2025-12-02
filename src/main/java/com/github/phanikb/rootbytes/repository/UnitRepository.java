@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.github.phanikb.rootbytes.entity.Unit;
@@ -32,4 +33,11 @@ public interface UnitRepository extends JpaRepository<Unit, UUID> {
     boolean existsByName(String name);
 
     boolean existsByAbbreviation(String abbreviation);
+
+    @Query("""
+            SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END
+            FROM Ingredient i
+            WHERE i.unit.id = :unitId
+            """)
+    boolean isUsedInIngredients(UUID unitId);
 }

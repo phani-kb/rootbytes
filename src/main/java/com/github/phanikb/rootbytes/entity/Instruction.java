@@ -18,7 +18,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +25,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(
-        name = "instructions",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"recipe_id", "step_number"})})
+@Table(name = "instructions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -29,7 +29,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -47,7 +46,7 @@ import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
 import com.github.phanikb.rootbytes.enums.RecipeStatus;
 
 @Entity
-@Table(name = "recipes", uniqueConstraints = { @UniqueConstraint(columnNames = { "author_id", "title" }) })
+@Table(name = "recipes")
 @Getter
 @Setter
 @NoArgsConstructor
