@@ -22,33 +22,46 @@ import com.github.phanikb.rootbytes.enums.notification.NotificationChannel;
 import com.github.phanikb.rootbytes.enums.notification.NotificationPriority;
 import com.github.phanikb.rootbytes.enums.notification.NotificationType;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.DATA_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.MESSAGE_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.MESSAGE_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TITLE_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TITLE_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TYPE_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.URL_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_XL;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotificationQueueRequest {
 
-    @NotNull(message = "User id is required")
+    @NotNull(message = "User id" + REQUIRED)
     private UUID userId;
 
-    @NotNull(message = "Notification type is required")
+    @NotNull(message = TYPE_REQUIRED)
     private NotificationType notificationType;
 
-    @NotBlank(message = "Title is required")
-    @Size(max = 200, message = "Title must not exceed 200 characters")
+    @NotBlank(message = TITLE_REQUIRED)
+    @Size(max = SIZE_M, message = TITLE_TOO_LONG)
     private String title;
 
-    @NotBlank(message = "Message is required")
+    @NotBlank(message = MESSAGE_REQUIRED)
+    @Size(max = SIZE_XL, message = MESSAGE_TOO_LONG)
     private String message;
 
+    @Size(max = SIZE_XL, message = DATA_TOO_LONG)
     private String data;
 
-    @Size(max = 500, message = "Action URL must not exceed 500 characters")
+    @Size(max = SIZE_M, message = URL_TOO_LONG)
     private String actionUrl;
 
     private NotificationPriority priority;
 
-    @NotNull(message = "Channel is required")
+    @NotNull(message = "Channel" + REQUIRED)
     private NotificationChannel channel;
 
     private Instant scheduledFor;

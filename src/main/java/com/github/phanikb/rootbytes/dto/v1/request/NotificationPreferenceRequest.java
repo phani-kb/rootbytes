@@ -6,12 +6,17 @@
 
 package com.github.phanikb.rootbytes.dto.v1.request;
 
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.github.phanikb.rootbytes.enums.notification.NotificationFrequency;
+
+import static com.github.phanikb.rootbytes.common.ValidationConstants.MAX_SUBSCRIBED_EVENTS;
 
 @Data
 @Builder
@@ -21,7 +26,13 @@ public class NotificationPreferenceRequest {
     private Boolean emailEnabled;
     private Boolean smsEnabled;
     private NotificationFrequency frequency;
+
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Quiet hours start must be in HH:mm format")
     private String quietHoursStart;
+
+    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Quiet hours end must be in HH:mm format")
     private String quietHoursEnd;
+
+    @Size(max = MAX_SUBSCRIBED_EVENTS, message = "Maximum " + MAX_SUBSCRIBED_EVENTS + " subscribed events allowed")
     private String[] subscribedEvents;
 }

@@ -27,6 +27,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.CATEGORY_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.DESCRIPTION_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_S;
+
 @Entity
 @Table(name = "permitted_lastnames")
 @Data
@@ -41,17 +48,17 @@ public class PermittedLastName extends AuditableEntity {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotBlank(message = "Last name is required")
-    @Size(max = 100, message = "Last name must not exceed 100 characters")
-    @Column(name = "last_name", nullable = false, unique = true, length = 100)
+    @NotBlank(message = "Last name" + REQUIRED)
+    @Size(max = SIZE_M, message = NAME_TOO_LONG)
+    @Column(name = "last_name", nullable = false, unique = true, length = SIZE_M)
     private String lastName;
 
-    @Size(max = 500, message = "Description must not exceed 500 characters")
-    @Column(name = "description", length = 500)
+    @Size(max = SIZE_M, message = DESCRIPTION_TOO_LONG)
+    @Column(name = "description", length = SIZE_M)
     private String description;
 
-    @Size(max = 50, message = "Category must not exceed 50 characters")
-    @Column(name = "category", length = 50)
+    @Size(max = SIZE_S, message = CATEGORY_TOO_LONG)
+    @Column(name = "category", length = SIZE_S)
     private String category;
 
     @Column(name = "is_active", nullable = false)

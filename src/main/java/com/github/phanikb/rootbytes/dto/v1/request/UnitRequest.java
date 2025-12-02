@@ -17,23 +17,33 @@ import lombok.NoArgsConstructor;
 
 import com.github.phanikb.rootbytes.enums.UnitType;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.ABBREVIATION_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.DESCRIPTION_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TYPE_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_L;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_S;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_XS;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnitRequest {
 
-    @NotBlank(message = "Unit name is required")
-    @Size(max = 50, message = "Unit name must not exceed 50 characters")
+    @NotBlank(message = NAME_REQUIRED)
+    @Size(max = SIZE_S, message = NAME_TOO_LONG)
     private String name;
 
-    @NotBlank(message = "Unit abbreviation is required")
-    @Size(max = 10, message = "Unit abbreviation must not exceed 10 characters")
+    @NotBlank(message = "Abbreviation" + REQUIRED)
+    @Size(max = SIZE_XS, message = ABBREVIATION_TOO_LONG)
     private String abbreviation;
 
-    @NotNull(message = "Unit type is required")
+    @NotNull(message = TYPE_REQUIRED)
     private UnitType unitType;
 
-    @Size(max = 200, message = "Description must not exceed 200 characters")
+    @Size(max = SIZE_L, message = DESCRIPTION_TOO_LONG)
     private String description;
 }

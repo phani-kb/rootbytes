@@ -16,21 +16,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.CATEGORY_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.DESCRIPTION_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_S;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PermittedLastNameRequest {
 
-    @NotBlank(message = "Last name is required")
-    @Size(max = 100, message = "Last name must not exceed 100 characters")
+    @NotBlank(message = "Last name" + REQUIRED)
+    @Size(max = SIZE_M, message = NAME_TOO_LONG)
     private String lastName;
 
-    @Size(max = 500, message = "Description must not exceed 500 characters")
+    @Size(max = SIZE_M, message = DESCRIPTION_TOO_LONG)
     private String description;
 
-    @Size(max = 50, message = "Category must not exceed 50 characters")
+    @Size(max = SIZE_S, message = CATEGORY_TOO_LONG)
     private String category;
 
-    private List<String> aliases; // list of alias names
+    private List<String> aliases;
 }

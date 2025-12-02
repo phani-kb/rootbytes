@@ -20,43 +20,56 @@ import lombok.NoArgsConstructor;
 
 import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.MAX_INGREDIENTS;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.MAX_INSTRUCTIONS;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.CATEGORY_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.MUST_BE_POSITIVE_OR_ZERO;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TEXT_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TITLE_REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.TITLE_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_S;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_XL;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RecipeRequest {
 
-    @NotBlank(message = "Title is required")
-    @Size(max = 200, message = "Title must not exceed 200 characters")
+    @NotBlank(message = TITLE_REQUIRED)
+    @Size(max = SIZE_M, message = TITLE_TOO_LONG)
     private String title;
 
-    @Size(max = 65_535, message = "Description is too long")
+    @Size(max = SIZE_XL, message = TEXT_TOO_LONG)
     private String description;
 
-    @Size(max = 65_535, message = "Story is too long")
+    @Size(max = SIZE_XL, message = TEXT_TOO_LONG)
     private String story;
 
     @Valid
+    @Size(max = MAX_INGREDIENTS, message = "Maximum " + MAX_INGREDIENTS + " ingredients allowed")
     private List<IngredientRequest> ingredients;
 
     @Valid
+    @Size(max = MAX_INSTRUCTIONS, message = "Maximum " + MAX_INSTRUCTIONS + " instructions allowed")
     private List<InstructionRequest> instructions;
 
-    @PositiveOrZero(message = "Prep time must be positive")
+    @PositiveOrZero(message = "Prep time" + MUST_BE_POSITIVE_OR_ZERO)
     private Integer prepTimeMinutes;
 
-    @PositiveOrZero(message = "Cook time must be positive")
+    @PositiveOrZero(message = "Cook time" + MUST_BE_POSITIVE_OR_ZERO)
     private Integer cookTimeMinutes;
 
-    @PositiveOrZero(message = "Servings must be positive")
+    @PositiveOrZero(message = "Servings" + MUST_BE_POSITIVE_OR_ZERO)
     private Integer servings;
 
     private RecipeDifficulty difficulty;
 
-    @Size(max = 50, message = "Cuisine must not exceed 50 characters")
+    @Size(max = SIZE_S, message = CATEGORY_TOO_LONG)
     private String cuisine;
 
-    @Size(max = 50, message = "Category must not exceed 50 characters")
+    @Size(max = SIZE_S, message = CATEGORY_TOO_LONG)
     private String category;
 
     private Boolean isPrivate;

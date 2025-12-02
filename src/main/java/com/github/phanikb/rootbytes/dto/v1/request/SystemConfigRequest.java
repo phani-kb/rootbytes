@@ -14,18 +14,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.CONFIG_VALUE_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.DESCRIPTION_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_XL;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SystemConfigRequest {
 
-    @Size(max = 100, message = "Key name must not exceed 100 characters")
+    @Size(max = SIZE_M, message = NAME_TOO_LONG)
     private String keyName;
 
-    @NotBlank(message = "Key value is required")
-    @Size(max = 255, message = "Key value must not exceed 255 characters")
+    @NotBlank(message = "Key value" + REQUIRED)
+    @Size(max = SIZE_XL, message = CONFIG_VALUE_TOO_LONG)
     private String keyValue;
 
+    @Size(max = SIZE_XL, message = DESCRIPTION_TOO_LONG)
     private String description;
 }

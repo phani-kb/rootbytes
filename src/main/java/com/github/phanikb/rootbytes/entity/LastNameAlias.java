@@ -33,6 +33,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.NAME_TOO_LONG;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.Messages.REQUIRED;
+import static com.github.phanikb.rootbytes.common.ValidationConstants.SIZE_M;
+
 @Entity
 @Table(name = "lastname_aliases")
 @Data
@@ -48,16 +52,16 @@ public class LastNameAlias {
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
-    @NotNull(message = "Permitted last name is required")
+    @NotNull(message = "Permitted last name" + REQUIRED)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "permitted_lastname_id", nullable = false)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private PermittedLastName permittedLastName;
 
-    @NotBlank(message = "Alias is required")
-    @Size(max = 100, message = "Alias must not exceed 100 characters")
-    @Column(name = "alias", nullable = false, length = 100)
+    @NotBlank(message = "Alias" + REQUIRED)
+    @Size(max = SIZE_M, message = NAME_TOO_LONG)
+    @Column(name = "alias", nullable = false, length = SIZE_M)
     private String alias;
 
     @CreatedDate
