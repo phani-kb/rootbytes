@@ -47,4 +47,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
             AND r.isPrivate = false
             """)
     Page<Recipe> findByLastName(@Param("lastName") String lastName, Pageable pageable);
+
+    List<Recipe> findByAuthorId(UUID authorId);
+
+    Page<Recipe> findByStatus(RecipeStatus status, Pageable pageable);
 }

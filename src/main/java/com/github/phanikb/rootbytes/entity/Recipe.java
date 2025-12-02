@@ -94,6 +94,10 @@ public class Recipe {
     @Builder.Default
     private Boolean isPrivate = false;
 
+    @Column(name = "strike_count")
+    @Builder.Default
+    private Integer strikeCount = 0;
+
     @OneToOne(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private RecipeDietaryInfo dietaryInfo;
 

@@ -11,6 +11,8 @@ create table if not exists users (
     status VARCHAR(20) not null default 'PENDING',
     email_verified BOOLEAN default false,
     phone_verified BOOLEAN default false,
+    ban_count INTEGER default 0,
+    banned_until TIMESTAMP,
     created_at TIMESTAMP not null default current_timestamp,
     updated_at TIMESTAMP not null default current_timestamp,
     last_login_at TIMESTAMP,
@@ -25,6 +27,8 @@ create index idx_users_role on users (user_role);
 create index idx_users_status on users (status);
 
 create index idx_users_public_name on users (public_name);
+
+create index idx_users_banned_until on users (banned_until);
 
 -- Invitation Codes table
 create table if not exists invitation_codes (
@@ -124,11 +128,14 @@ create table if not exists recipes (
     difficulty VARCHAR(20),
     cuisine VARCHAR(50),
     category VARCHAR(50),
+    strike_count INTEGER default 0,
     created_at TIMESTAMP not null default current_timestamp,
     updated_at TIMESTAMP not null default current_timestamp,
     submitted_at TIMESTAMP,
     published_at TIMESTAMP,
-    constraint chk_recipe_status check (status in ('DRAFT', 'PENDING_REVIEW', 'PENDING_APPROVAL', 'PUBLISHED', 'REJECTED', 'ARCHIVED')),
+    constraint chk_recipe_status check (
+        status in ('DRAFT', 'PENDING_REVIEW', 'PENDING_APPROVAL', 'PUBLISHED', 'SUSPENDED', 'REJECTED', 'PERMANENTLY_REJECTED', 'ARCHIVED')
+    ),
     constraint chk_recipe_difficulty check (difficulty in ('EASY', 'MEDIUM', 'HARD')),
     constraint uq_author_title_version unique (author_id, title, version),
     foreign key (author_id) references users (id)

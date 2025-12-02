@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UnitControllerTest {
@@ -67,8 +67,8 @@ class UnitControllerTest {
 
     @Test
     void shouldGetAllActiveUnits() {
-        given(service.getAllActiveUnits()).willReturn(Collections.singletonList(unit));
-        given(mapper.toResponse(any(Unit.class))).willReturn(response);
+        when(service.getAllActiveUnits()).thenReturn(Collections.singletonList(unit));
+        when(mapper.toResponse(any(Unit.class))).thenReturn(response);
 
         var result = controller.getAllActiveUnits();
 
@@ -80,8 +80,8 @@ class UnitControllerTest {
 
     @Test
     void shouldGetUnitById() {
-        given(service.getUnitById(unitId)).willReturn(unit);
-        given(mapper.toResponse(unit)).willReturn(response);
+        when(service.getUnitById(unitId)).thenReturn(unit);
+        when(mapper.toResponse(unit)).thenReturn(response);
 
         var result = controller.getUnitById(unitId);
 
@@ -93,8 +93,8 @@ class UnitControllerTest {
 
     @Test
     void shouldGetUnitsByType() {
-        given(service.getUnitsByType(UnitType.VOLUME)).willReturn(Collections.singletonList(unit));
-        given(mapper.toResponse(any(Unit.class))).willReturn(response);
+        when(service.getUnitsByType(UnitType.VOLUME)).thenReturn(Collections.singletonList(unit));
+        when(mapper.toResponse(any(Unit.class))).thenReturn(response);
 
         var result = controller.getUnitsByType(UnitType.VOLUME);
 
@@ -112,8 +112,8 @@ class UnitControllerTest {
                 .unitType(UnitType.VOLUME)
                 .build();
 
-        given(service.createUnit(any(UnitRequest.class))).willReturn(unit);
-        given(mapper.toResponse(unit)).willReturn(response);
+        when(service.createUnit(any(UnitRequest.class))).thenReturn(unit);
+        when(mapper.toResponse(unit)).thenReturn(response);
 
         var result = controller.createUnit(request);
 
@@ -131,8 +131,8 @@ class UnitControllerTest {
                 .unitType(UnitType.VOLUME)
                 .build();
 
-        given(service.updateUnitById(any(UUID.class), any(UnitRequest.class))).willReturn(unit);
-        given(mapper.toResponse(unit)).willReturn(response);
+        when(service.updateUnitById(any(UUID.class), any(UnitRequest.class))).thenReturn(unit);
+        when(mapper.toResponse(unit)).thenReturn(response);
 
         var result = controller.updateUnit(unitId, request);
 

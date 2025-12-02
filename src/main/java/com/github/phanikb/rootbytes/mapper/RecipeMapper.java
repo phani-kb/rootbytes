@@ -28,10 +28,8 @@ import com.github.phanikb.rootbytes.entity.Instruction;
 import com.github.phanikb.rootbytes.entity.Recipe;
 import com.github.phanikb.rootbytes.entity.RecipeDietaryInfo;
 
-@Mapper(
-        componentModel = MappingConstants.ComponentModel.SPRING,
-        unmappedTargetPolicy = ReportingPolicy.WARN,
-        uses = {IngredientMapper.class, InstructionMapper.class})
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN, uses = {
+        IngredientMapper.class, InstructionMapper.class })
 public interface RecipeMapper {
     @IterableMapping(qualifiedByName = "toIngredientResponse")
     List<IngredientResponse> mapIngredients(List<Ingredient> ingredients);
@@ -72,6 +70,7 @@ public interface RecipeMapper {
     @Mapping(target = "isCurrentVersion", ignore = true)
     @Mapping(target = "publishedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "strikeCount", ignore = true)
     @Mapping(target = "submittedAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "version", ignore = true)

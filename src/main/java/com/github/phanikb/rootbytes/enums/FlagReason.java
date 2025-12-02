@@ -11,5 +11,9 @@ public enum FlagReason {
     NON_VEGETARIAN,
     SPAM,
     COPYRIGHT,
+    MISLEADING,
+    DUPLICATE,
+    LOW_QUALITY,
+    HEALTH_SAFETY,
     OTHER
 }

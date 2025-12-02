@@ -95,9 +95,20 @@ public class UserEntity {
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
 
+    @Builder.Default
+    @Column(name = "ban_count")
+    private Integer banCount = 0;
+
+    @Nullable
+    @Column(name = "banned_until")
+    private Instant bannedUntil;
+
     /**
-     * Returns the display name for the author. If publicName is set, returns "PublicName (@uniqueName)" If publicName
+     * Returns the display name for the author. If publicName is set, returns
+     * "PublicName (@uniqueName)" If publicName
      * is null or empty, returns "@uniqueName"
+     *
+     * @return the formatted display name for the author
      */
     public String getAuthorDisplay() {
         if (publicName != null && !publicName.trim().isEmpty()) {

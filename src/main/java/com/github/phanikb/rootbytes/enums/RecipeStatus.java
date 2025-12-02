@@ -11,6 +11,8 @@ public enum RecipeStatus {
     PENDING_REVIEW,
     PENDING_APPROVAL,
     PUBLISHED,
+    SUSPENDED,
     REJECTED,
+    PERMANENTLY_REJECTED,
     ARCHIVED
 }
