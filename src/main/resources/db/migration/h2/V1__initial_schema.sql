@@ -107,6 +107,65 @@ create index idx_lastname_aliases_alias on lastname_aliases (alias);
 
 create unique index idx_lastname_aliases_unique on lastname_aliases (permitted_lastname_id, alias);
 
+-- Recipes table
+create table if not exists recipes (
+    id uuid default random_uuid () primary key,
+    author_id uuid not null,
+    title VARCHAR(200) not null,
+    description CLOB,
+    story CLOB,
+    version INTEGER not null default 1,
+    status VARCHAR(30) not null default 'DRAFT',
+    is_current_version BOOLEAN default false,
+    is_private BOOLEAN default false,
+    prep_time_minutes INTEGER,
+    cook_time_minutes INTEGER,
+    servings INTEGER,
+    difficulty VARCHAR(20),
+    cuisine VARCHAR(50),
+    category VARCHAR(50),
+    created_at TIMESTAMP not null default current_timestamp,
+    updated_at TIMESTAMP not null default current_timestamp,
+    submitted_at TIMESTAMP,
+    published_at TIMESTAMP,
+    constraint chk_recipe_status check (status in ('DRAFT', 'PENDING_REVIEW', 'PENDING_APPROVAL', 'PUBLISHED', 'REJECTED', 'ARCHIVED')),
+    constraint chk_recipe_difficulty check (difficulty in ('EASY', 'MEDIUM', 'HARD')),
+    constraint uq_author_title_version unique (author_id, title, version),
+    foreign key (author_id) references users (id)
+);
+
+create index idx_recipes_author on recipes (author_id);
+
+create index idx_recipes_status on recipes (status);
+
+create index idx_recipes_published_at on recipes (published_at);
+
+create index idx_recipes_title on recipes (title);
+
+create index idx_recipes_is_current_version on recipes (is_current_version);
+
+-- Recipe Dietary Info table
+create table if not exists recipe_dietary_info (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null unique,
+    is_vegetarian BOOLEAN default true,
+    is_vegan BOOLEAN default false,
+    is_dairy_free BOOLEAN default false,
+    is_gluten_free BOOLEAN default false,
+    has_nuts BOOLEAN default false,
+    has_onion BOOLEAN default false,
+    has_garlic BOOLEAN default false,
+    has_eggs BOOLEAN default false,
+    has_soy BOOLEAN default false,
+    foreign key (recipe_id) references recipes (id) on delete cascade
+);
+
+create index idx_recipe_dietary_info_recipe on recipe_dietary_info (recipe_id);
+
+create index idx_recipe_dietary_info_vegetarian on recipe_dietary_info (is_vegetarian);
+
+create index idx_recipe_dietary_info_vegan on recipe_dietary_info (is_vegan);
+
 -- Units table
 create table if not exists units (
     id uuid default random_uuid () primary key,
@@ -126,6 +185,38 @@ create index idx_units_is_active on units (is_active);
 
 create index idx_units_name on units (name);
 
+-- Ingredients table
+create table if not exists ingredients (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    name VARCHAR(200) not null,
+    quantity DECIMAL(10, 2),
+    unit_id uuid,
+    notes CLOB,
+    order_index INTEGER not null,
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (unit_id) references units (id)
+);
+
+create index idx_ingredients_recipe on ingredients (recipe_id);
+
+create index idx_ingredients_unit on ingredients (unit_id);
+
+-- Instructions table
+create table if not exists instructions (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    step_number INTEGER not null,
+    description CLOB not null,
+    duration_minutes INTEGER,
+    constraint uq_recipe_step unique (recipe_id, step_number),
+    foreign key (recipe_id) references recipes (id) on delete cascade
+);
+
+create index idx_instructions_recipe on instructions (recipe_id);
+
+create index idx_instructions_step on instructions (recipe_id, step_number);
+
 -- Notifications table
 create table if not exists notifications (
     id uuid default random_uuid () primary key,
@@ -136,6 +227,7 @@ create table if not exists notifications (
     data CLOB,
     status VARCHAR(20) not null default 'UNREAD',
     priority VARCHAR(20) not null default 'MEDIUM',
+    action_url VARCHAR(500),
     created_at TIMESTAMP not null default current_timestamp,
     read_at TIMESTAMP,
     archived_at TIMESTAMP,

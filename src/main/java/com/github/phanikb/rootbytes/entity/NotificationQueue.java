@@ -19,7 +19,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -60,12 +59,10 @@ public class NotificationQueue {
     @Column(nullable = false, length = 200)
     private String title;
 
-    @Lob
     @Column(nullable = false, columnDefinition = "TEXT")
     private String message;
 
-    @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String data;
 
     @Column(name = "action_url", length = 500)
@@ -101,7 +98,6 @@ public class NotificationQueue {
     @Nullable
     private Instant lastAttemptAt;
 
-    @Lob
     @Column(name = "error_message", columnDefinition = "TEXT")
     @Nullable
     private String errorMessage;
