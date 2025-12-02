@@ -224,6 +224,84 @@ create index idx_instructions_recipe on instructions (recipe_id);
 
 create index idx_instructions_step on instructions (recipe_id, step_number);
 
+-- Reviews table
+create table if not exists reviews (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    reviewer_id uuid not null,
+    status VARCHAR(20) not null default 'PENDING',
+    comments CLOB,
+    reviewed_at TIMESTAMP not null default current_timestamp,
+    constraint chk_review_status check (status in ('PENDING', 'APPROVED', 'REJECTED')),
+    constraint uq_recipe_reviewer unique (recipe_id, reviewer_id),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (reviewer_id) references users (id)
+);
+
+create index idx_reviews_recipe on reviews (recipe_id);
+
+create index idx_reviews_reviewer on reviews (reviewer_id);
+
+create index idx_reviews_status on reviews (status);
+
+-- Approvals table
+create table if not exists approvals (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    approver_id uuid not null,
+    status VARCHAR(20) not null default 'PENDING',
+    comments CLOB,
+    approved_at TIMESTAMP not null default current_timestamp,
+    constraint chk_approval_status check (status in ('PENDING', 'APPROVED', 'REJECTED')),
+    constraint uq_recipe_approver unique (recipe_id, approver_id),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (approver_id) references users (id)
+);
+
+create index idx_approvals_recipe on approvals (recipe_id);
+
+create index idx_approvals_approver on approvals (approver_id);
+
+create index idx_approvals_status on approvals (status);
+
+-- Flags table
+create table if not exists flags (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    user_id uuid not null,
+    reason VARCHAR(50) not null,
+    description CLOB,
+    status VARCHAR(20) not null default 'PENDING',
+    created_at TIMESTAMP not null default current_timestamp,
+    resolved_at TIMESTAMP,
+    resolved_by uuid,
+    constraint chk_flag_reason check (
+        reason in (
+            'INAPPROPRIATE',
+            'NON_VEGETARIAN',
+            'SPAM',
+            'COPYRIGHT',
+            'MISLEADING',
+            'DUPLICATE',
+            'LOW_QUALITY',
+            'HEALTH_SAFETY',
+            'OTHER'
+        )
+    ),
+    constraint chk_flag_status check (status in ('PENDING', 'UNDER_REVIEW', 'RESOLVED', 'DISMISSED')),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (user_id) references users (id),
+    foreign key (resolved_by) references users (id)
+);
+
+create index idx_flags_recipe on flags (recipe_id);
+
+create index idx_flags_user on flags (user_id);
+
+create index idx_flags_status on flags (status);
+
+create index idx_flags_created_at on flags (created_at);
+
 -- Notifications table
 create table if not exists notifications (
     id uuid default random_uuid () primary key,

@@ -104,8 +104,7 @@ public class UserEntity {
     private Instant bannedUntil;
 
     /**
-     * Returns the display name for the author. If publicName is set, returns
-     * "PublicName (@uniqueName)" If publicName
+     * Returns the display name for the author. If publicName is set, returns "PublicName (@uniqueName)" If publicName
      * is null or empty, returns "@uniqueName"
      *
      * @return the formatted display name for the author
