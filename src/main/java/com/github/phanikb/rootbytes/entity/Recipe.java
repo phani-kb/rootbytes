@@ -53,7 +53,7 @@ import com.github.phanikb.rootbytes.enums.RecipeStatus;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = { "ingredients", "instructions", "author" })
+@ToString(exclude = {"ingredients", "instructions", "author"})
 public class Recipe {
     private static final String RECIPE = "recipe";
 

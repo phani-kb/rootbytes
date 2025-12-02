@@ -40,7 +40,7 @@ public class RecipeDietaryInfo {
 
     @Column(name = "is_vegetarian")
     @Builder.Default
-    private Boolean isVegetarian = true;
+    private Boolean isVegetarian = false;
 
     @Column(name = "is_vegan")
     @Builder.Default
