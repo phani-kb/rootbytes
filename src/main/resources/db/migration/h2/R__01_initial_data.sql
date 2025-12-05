@@ -47,6 +47,7 @@ values -- Volume units
     ('Slice', 'slice', 'COUNT', 'Single slice'),
     ('Sprig', 'sprig', 'COUNT', 'Small stem with leaves'),
     ('Stalk', 'stalk', 'COUNT', 'Single stalk'),
+    ('To Taste', 'to taste', 'COUNT', 'Amount according to preference'),
     -- Length units
     ('Centimeter', 'cm', 'LENGTH', 'Metric length measurement'),
     ('Inch', 'in', 'LENGTH', 'Imperial length measurement'),
