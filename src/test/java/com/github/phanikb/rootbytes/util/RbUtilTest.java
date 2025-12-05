@@ -14,7 +14,7 @@ import com.github.phanikb.rootbytes.common.Constants;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RbUtilTest {
+class RbUtilTest {
 
     @Test
     void testGetAppNameVersion() {

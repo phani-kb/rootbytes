@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
 
@@ -55,7 +54,7 @@ public class PermittedLastNameController {
     public ResponseEntity<RbApiResponse<List<PermittedLastNameResponse>>> getAllActiveLastNames() {
         List<PermittedLastNameResponse> lastNames = validLastNameService.getAllActiveLastNames().stream()
                 .map(mapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(RbApiResponse.success(lastNames));
     }
@@ -72,7 +71,7 @@ public class PermittedLastNameController {
         PagedResponse<PermittedLastNameResponse> response = PagedResponse.<PermittedLastNameResponse>builder()
                 .content(lastNamesPage.getContent().stream()
                         .map(mapper::toResponse)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .page(lastNamesPage.getNumber())
                 .size(lastNamesPage.getSize())
                 .totalElements(lastNamesPage.getTotalElements())
@@ -89,7 +88,7 @@ public class PermittedLastNameController {
 
         List<PermittedLastNameResponse> results = validLastNameService.searchLastNames(query).stream()
                 .map(mapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(RbApiResponse.success(results));
     }
@@ -99,7 +98,7 @@ public class PermittedLastNameController {
 
         List<PermittedLastNameResponse> lastNames = validLastNameService.getByCategory(category).stream()
                 .map(mapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(RbApiResponse.success(lastNames));
     }

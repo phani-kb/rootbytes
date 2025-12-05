@@ -47,7 +47,15 @@ public class UnitService {
 
     @Transactional(readOnly = true)
     public Unit getUnitById(UUID id) {
+        return findByIdOrThrow(id);
+    }
+
+    private Unit findByIdOrThrow(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(UNIT_ENTITY, "id", id));
+    }
+
+    private Unit persistUnit(Unit unit) {
+        return repository.save(unit);
     }
 
     @Transactional(readOnly = true)
@@ -66,7 +74,7 @@ public class UnitService {
 
     @Transactional
     public Unit saveUnit(Unit unit) {
-        return repository.save(unit);
+        return persistUnit(unit);
     }
 
     @Transactional
@@ -86,14 +94,14 @@ public class UnitService {
                 .description(request.getDescription())
                 .isActive(true)
                 .build();
-        Unit savedUnit = saveUnit(unit);
+        Unit savedUnit = persistUnit(unit);
         log.info("Created new unit: {} ({})", savedUnit.getName(), savedUnit.getAbbreviation());
         return savedUnit;
     }
 
     @Transactional
     public Unit updateUnitById(UUID id, UnitRequest request) {
-        Unit unit = getUnitById(id);
+        Unit unit = findByIdOrThrow(id);
 
         if (!unit.getName().equals(request.getName()) && repository.existsByName(request.getName())) {
             throw new DuplicateResourceException(UNIT_ENTITY, UNIT_NAME, request.getName());
@@ -109,14 +117,14 @@ public class UnitService {
         unit.setUnitType(request.getUnitType());
         unit.setDescription(request.getDescription());
 
-        Unit updatedUnit = saveUnit(unit);
+        Unit updatedUnit = persistUnit(unit);
         log.info("Updated unit: {} ({})", updatedUnit.getName(), updatedUnit.getAbbreviation());
         return updatedUnit;
     }
 
     @Transactional
     public void deactivateUnit(UUID id) {
-        Unit unit = getUnitById(id);
+        Unit unit = findByIdOrThrow(id);
         if (repository.isUsedInIngredients(id)) {
             throw new ResourceInUseException(UNIT_ENTITY, UNIT_NAME, unit.getName());
         }
@@ -127,7 +135,7 @@ public class UnitService {
 
     @Transactional
     public void activateUnit(UUID id) {
-        Unit unit = getUnitById(id);
+        Unit unit = findByIdOrThrow(id);
         unit.setActive(true);
         repository.save(unit);
         log.info("Activated unit: {} ({})", unit.getName(), unit.getAbbreviation());

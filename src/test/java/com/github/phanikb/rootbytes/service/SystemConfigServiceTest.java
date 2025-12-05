@@ -48,9 +48,9 @@ class SystemConfigServiceTest {
     private SystemConfigService systemConfigService;
 
     private SystemConfig testConfig;
-    private final String TEST_KEY = "favorites.max-per-user";
-    private final String TEST_VALUE = "50";
-    private final String TEST_DESCRIPTION = "Maximum favorites allowed per user";
+    private static final String TEST_KEY = "favorites.max-per-user";
+    private static final String TEST_VALUE = "50";
+    private static final String TEST_DESCRIPTION = "Maximum favorites allowed per user";
 
     @BeforeEach
     void setUp() {
@@ -176,7 +176,7 @@ class SystemConfigServiceTest {
                 .build();
         UserEntity mockUser =
                 UserEntity.builder().id(UUID.randomUUID()).email("admin").build();
-        when(cacheDelegate.setValue(eq(TEST_KEY), eq(newValue), eq(TEST_DESCRIPTION), eq(mockUser)))
+        when(cacheDelegate.setValue(TEST_KEY, newValue, TEST_DESCRIPTION, mockUser))
                 .thenReturn(updatedConfig);
 
         SystemConfig result = systemConfigService.setValue(TEST_KEY, newValue, TEST_DESCRIPTION, mockUser);

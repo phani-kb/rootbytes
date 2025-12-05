@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UnitServiceTest {
+class UnitServiceTest {
 
     @Mock
     private UnitRepository repository;
@@ -52,7 +52,7 @@ public class UnitServiceTest {
     private Unit gram;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         tablespoon = Unit.builder()
                 .id(UUID.randomUUID())
                 .name("Tablespoon")

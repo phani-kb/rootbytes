@@ -135,7 +135,7 @@ public final class RbGenerator {
             return String.valueOf(MIN_SUFFIX_LENGTH + SECURE_RANDOM.nextInt(9));
         }
         int upperBound = (int) Math.pow(10, maxLength) - 1;
-        int lowerBound = (int) Math.pow(10, maxLength - 1);
+        int lowerBound = (int) Math.pow(10, maxLength - 1d);
         return String.valueOf(lowerBound + SECURE_RANDOM.nextInt(upperBound - lowerBound + 1));
     }
 }

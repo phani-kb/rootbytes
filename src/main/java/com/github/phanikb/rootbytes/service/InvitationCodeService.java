@@ -30,7 +30,6 @@ public class InvitationCodeService {
 
     private final InvitationCodeRepository invitationCodeRepository;
 
-    @Transactional(readOnly = true)
     public InvitationCode validateInvitationCode(String code, UserEntity invitee) {
         log.debug("Validating invitation code: {}", code);
 
@@ -38,7 +37,7 @@ public class InvitationCodeService {
                 .findByCode(code)
                 .orElseThrow(() -> new InvalidInvitationException("Invalid invitation code"));
 
-        if (!invitation.getIsActive()) {
+        if (!Boolean.TRUE.equals(invitation.getIsActive())) {
             throw new InvalidInvitationException("Invitation code is no longer active");
         }
 
@@ -85,7 +84,7 @@ public class InvitationCodeService {
     private String generateUniqueCode() {
         return UUID.randomUUID()
                 .toString()
-                .replaceAll("-", "")
+                .replace("-", "")
                 .substring(0, Math.min(Constants.INVITATION_CODE_LENGTH, Constants.MAX_INVITATION_CODE_LENGTH))
                 .toUpperCase(RbStringUtil.ROOT_LOCALE);
     }

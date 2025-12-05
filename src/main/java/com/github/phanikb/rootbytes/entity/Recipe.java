@@ -55,7 +55,6 @@ import com.github.phanikb.rootbytes.enums.RecipeStatus;
 @EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"ingredients", "instructions", "author"})
 public class Recipe {
-    private static final String RECIPE = "recipe";
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -119,11 +118,11 @@ public class Recipe {
     @Column(length = 50)
     private String category;
 
-    @OneToMany(mappedBy = RECIPE, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Ingredient> ingredients = new ArrayList<>();
 
-    @OneToMany(mappedBy = RECIPE, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("stepNumber")
     @Builder.Default
     private List<Instruction> instructions = new ArrayList<>();

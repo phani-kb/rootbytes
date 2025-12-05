@@ -44,9 +44,9 @@ class SystemConfigCacheDelegateTest {
 
     private SystemConfig testConfig;
     private UserEntity testUser;
-    private final String TEST_KEY = "test.config.key";
-    private final String TEST_VALUE = "test-value";
-    private final String TEST_DESCRIPTION = "Test configuration";
+    private static final String TEST_KEY = "test.config.key";
+    private static final String TEST_VALUE = "test-value";
+    private static final String TEST_DESCRIPTION = "Test configuration";
 
     @BeforeEach
     void setUp() {

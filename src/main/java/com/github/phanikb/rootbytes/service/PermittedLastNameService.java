@@ -83,6 +83,10 @@ public class PermittedLastNameService {
 
     @Transactional(readOnly = true)
     public PermittedLastName getById(UUID id) {
+        return findByIdOrThrow(id);
+    }
+
+    private PermittedLastName findByIdOrThrow(UUID id) {
         return validLastNameRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(PERMITTEDLASTNAME_ENITY, "id", id));
@@ -133,11 +137,11 @@ public class PermittedLastNameService {
     public PermittedLastName updateValidLastName(UUID id, PermittedLastNameRequest request) {
         log.info("Updating valid last name: {}", id);
 
-        PermittedLastName existing = getById(id);
+        PermittedLastName existing = findByIdOrThrow(id);
 
         if (!RbStringUtil.equalsIgnoreCase(existing.getLastName(), request.getLastName())
                 && validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName())) {
-            throw new DuplicateResourceException("PermittedLastName", "lastName", request.getLastName());
+            throw new DuplicateResourceException(PERMITTEDLASTNAME_ENITY, "lastName", request.getLastName());
         }
 
         existing.setLastName(request.getLastName());
@@ -172,7 +176,7 @@ public class PermittedLastNameService {
     @Transactional
     public void deactivateLastName(UUID id) {
         log.info("Deactivating last name: {}", id);
-        PermittedLastName validLastName = getById(id);
+        PermittedLastName validLastName = findByIdOrThrow(id);
         validLastName.setIsActive(false);
         validLastNameRepository.save(validLastName);
     }
@@ -180,7 +184,7 @@ public class PermittedLastNameService {
     @Transactional
     public void activateLastName(UUID id) {
         log.info("Activating last name: {}", id);
-        PermittedLastName validLastName = getById(id);
+        PermittedLastName validLastName = findByIdOrThrow(id);
         validLastName.setIsActive(true);
         validLastNameRepository.save(validLastName);
     }
@@ -188,7 +192,7 @@ public class PermittedLastNameService {
     @Transactional
     public void deleteLastName(UUID id) {
         log.info("Deleting last name: {}", id);
-        PermittedLastName validLastName = getById(id);
+        PermittedLastName validLastName = findByIdOrThrow(id);
         validLastNameRepository.delete(validLastName);
     }
 

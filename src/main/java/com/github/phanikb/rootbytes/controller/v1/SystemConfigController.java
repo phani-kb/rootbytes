@@ -41,6 +41,7 @@ public class SystemConfigController {
 
     private final SystemConfigService systemConfigService;
     private final com.github.phanikb.rootbytes.mapper.SystemConfigMapper systemConfigMapper;
+    public static final String KEY_CONFIG_NOT_FOUND = "Configuration not found for key: ";
 
     @GetMapping
     @PreAuthorize(Constants.ADMIN_ROLE)
@@ -57,7 +58,7 @@ public class SystemConfigController {
                 .getConfig(key)
                 .map(config -> ResponseEntity.ok(RbApiResponse.success(systemConfigMapper.toResponse(config))))
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(RbApiResponse.error("Configuration not found for key: " + key)));
+                        .body(RbApiResponse.error(KEY_CONFIG_NOT_FOUND + key)));
     }
 
     @GetMapping("/{key}/value")
@@ -66,7 +67,7 @@ public class SystemConfigController {
         Optional<String> value = systemConfigService.getValue(key);
         return value.map(s -> ResponseEntity.ok(RbApiResponse.success(null, s)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(RbApiResponse.error("Configuration not found for key: " + key)));
+                        .body(RbApiResponse.error(KEY_CONFIG_NOT_FOUND + key)));
     }
 
     @PutMapping("/{key}")
@@ -105,8 +106,7 @@ public class SystemConfigController {
     @PreAuthorize(Constants.ADMIN_ROLE)
     public ResponseEntity<RbApiResponse<Void>> deleteConfig(@PathVariable String key) {
         if (!systemConfigService.exists(key)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(RbApiResponse.error("Configuration not found for key: " + key));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(RbApiResponse.error(KEY_CONFIG_NOT_FOUND + key));
         }
 
         systemConfigService.deleteValue(key);

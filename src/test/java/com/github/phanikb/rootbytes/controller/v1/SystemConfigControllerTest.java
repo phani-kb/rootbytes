@@ -116,7 +116,7 @@ class SystemConfigControllerTest {
         assertNotNull(result.getBody());
         assertEquals(false, result.getBody().getSuccess());
         assertEquals(
-                "Configuration not found for key: nonexistent.key",
+                SystemConfigController.KEY_CONFIG_NOT_FOUND + "nonexistent.key",
                 result.getBody().getMessage());
 
         verify(systemConfigService).getConfig("nonexistent.key");
@@ -146,7 +146,7 @@ class SystemConfigControllerTest {
         assertNotNull(result.getBody());
         assertEquals(false, result.getBody().getSuccess());
         assertEquals(
-                "Configuration not found for key: nonexistent.key",
+                SystemConfigController.KEY_CONFIG_NOT_FOUND + "nonexistent.key",
                 result.getBody().getMessage());
 
         verify(systemConfigService).getValue("nonexistent.key");
@@ -283,7 +283,7 @@ class SystemConfigControllerTest {
         assertNotNull(result.getBody());
         assertEquals(false, result.getBody().getSuccess());
         assertEquals(
-                "Configuration not found for key: nonexistent.key",
+                SystemConfigController.KEY_CONFIG_NOT_FOUND + "nonexistent.key",
                 result.getBody().getMessage());
 
         verify(systemConfigService).exists("nonexistent.key");

@@ -27,10 +27,10 @@ public class NotificationPreferenceRequest {
     private Boolean smsEnabled;
     private NotificationFrequency frequency;
 
-    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Quiet hours start must be in HH:mm format")
+    @Pattern(regexp = "^([01]?\\d|2[0-3]):[0-5]\\d$", message = "Quiet hours start must be in HH:mm format")
     private String quietHoursStart;
 
-    @Pattern(regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Quiet hours end must be in HH:mm format")
+    @Pattern(regexp = "^([01]?\\d|2[0-3]):[0-5]\\d$", message = "Quiet hours end must be in HH:mm format")
     private String quietHoursEnd;
 
     @Size(max = MAX_SUBSCRIBED_EVENTS, message = "Maximum " + MAX_SUBSCRIBED_EVENTS + " subscribed events allowed")

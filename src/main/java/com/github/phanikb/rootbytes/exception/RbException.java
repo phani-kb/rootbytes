@@ -12,11 +12,11 @@ public abstract class RbException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public RbException(String message) {
+    protected RbException(String message) {
         super(message);
     }
 
-    public RbException(String message, Throwable cause) {
+    protected RbException(String message, Throwable cause) {
         super(message, cause);
     }
 }

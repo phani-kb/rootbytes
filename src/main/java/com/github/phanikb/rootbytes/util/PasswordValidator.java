@@ -29,17 +29,17 @@ public final class PasswordValidator {
     private static final int MAX_LENGTH = 128;
     private static final Pattern UPPERCASE = Pattern.compile("[A-Z]");
     private static final Pattern LOWERCASE = Pattern.compile("[a-z]");
-    private static final Pattern DIGIT = Pattern.compile("[0-9]");
+    private static final Pattern DIGIT = Pattern.compile("\\d");
     private static final Pattern SPECIAL = Pattern.compile("[!@#$%^&*(),.?\":{}|<>_\\-+=\\[\\]\\\\;'/`~]");
-    private static final Pattern SEQUENTIAL_NUMBERS = Pattern.compile(".*(?:012|123|234|345|456|567|678|789|890).*");
-    private static final Pattern SEQUENTIAL_LETTERS = Pattern.compile(
-            ".*(?:abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz).*");
+    private static final Pattern SEQUENTIAL_NUMBERS = Pattern.compile("012|123|234|345|456|567|678|789|890");
+    private static final String DEFAULT_WEAK_PASSWORDS_PATH = "/security/weak-passwords.txt";
+    private static final String WEAK_PASSWORDS_PATH_PROPERTY = "rootbytes.security.weak-passwords-path";
     private static final Set<String> WEAK_PASSWORDS = loadWeakPasswords();
 
     private PasswordValidator() {}
 
     private static Set<String> loadWeakPasswords() {
-        String resourcePath = "/security/weak-passwords.txt";
+        String resourcePath = System.getProperty(WEAK_PASSWORDS_PATH_PROPERTY, DEFAULT_WEAK_PASSWORDS_PATH);
         Set<String> passwords = new HashSet<>();
 
         try (InputStream is = PasswordValidator.class.getResourceAsStream(resourcePath)) {
@@ -142,8 +142,19 @@ public final class PasswordValidator {
             }
         }
 
-        return SEQUENTIAL_NUMBERS.matcher(lower).matches()
-                || SEQUENTIAL_LETTERS.matcher(lower).matches();
+        return SEQUENTIAL_NUMBERS.matcher(lower).find() || hasSequentialLetters(lower);
+    }
+
+    private static boolean hasSequentialLetters(String str) {
+        for (int i = 0; i < str.length() - 2; i++) {
+            char c1 = str.charAt(i);
+            char c2 = str.charAt(i + 1);
+            char c3 = str.charAt(i + 2);
+            if (c1 >= 'a' && c1 <= 'x' && c2 == c1 + 1 && c3 == c1 + 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public record ValidationResult(

@@ -167,10 +167,10 @@ class InvitationCodeServiceTest {
     @Test
     void shouldGenerateUniqueCodeFormat() {
         when(invitationCodeRepository.save(any(InvitationCode.class))).thenAnswer(invocation -> {
-            InvitationCode code = invocation.getArgument(0);
-            assertEquals(8, code.getCode().length());
-            assertEquals(code.getCode(), code.getCode().toUpperCase());
-            return code;
+            InvitationCode iCode = invocation.getArgument(0);
+            assertEquals(8, iCode.getCode().length());
+            assertEquals(iCode.getCode(), iCode.getCode().toUpperCase());
+            return iCode;
         });
 
         invitationCodeService.generateInvitationCode(inviter, invitee.getEmail());

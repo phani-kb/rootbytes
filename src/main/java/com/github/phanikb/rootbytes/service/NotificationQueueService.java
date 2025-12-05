@@ -151,12 +151,11 @@ public class NotificationQueueService {
         List<NotificationQueue> candidates =
                 queueRepository.findByStatusAndLastAttemptAtBefore(QueueStatus.FAILED, retryAfter, pageable);
 
-        List<NotificationQueue> toRequeue = candidates.stream()
-                .filter(this::isEligibleForRetry)
-                .peek(this::resetForRetry)
-                .toList();
+        List<NotificationQueue> toRequeue =
+                candidates.stream().filter(this::isEligibleForRetry).toList();
+        toRequeue.forEach(this::resetForRetry);
 
-        queueRepository.saveAll(candidates);
+        queueRepository.saveAll(toRequeue);
         log.info("Requeued {} failed notifications for retry", toRequeue.size());
         return toRequeue.size();
     }

@@ -20,6 +20,7 @@ import com.github.phanikb.rootbytes.repository.UserRepository;
 @Service
 @RequiredArgsConstructor
 public class UserProfileService {
+    private static final String USER_NOT_FOUND = "User not found";
 
     private final UserRepository userRepository;
 
@@ -28,7 +29,7 @@ public class UserProfileService {
         log.info("Updating public name for user: {}", email);
 
         UserEntity user =
-                userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
 
         // allow clearing the public name by setting to null
         if (publicName == null || publicName.trim().isEmpty()) {
@@ -43,12 +44,12 @@ public class UserProfileService {
     }
 
     public UserEntity getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 
     public UserEntity getUserByUniqueName(String uniqueName) {
         return userRepository
                 .findByUniqueName(uniqueName)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
     }
 }

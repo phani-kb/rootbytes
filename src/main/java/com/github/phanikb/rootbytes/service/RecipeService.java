@@ -47,6 +47,10 @@ public class RecipeService {
 
     @Transactional(readOnly = true)
     public Recipe getRecipeById(UUID id) {
+        return findRecipeByIdOrThrow(id);
+    }
+
+    private Recipe findRecipeByIdOrThrow(UUID id) {
         log.debug("Fetching recipe with id: {}", id);
         return recipeRepository.findById(id).orElseThrow(() -> new RecipeNotFoundException(id));
     }
@@ -141,7 +145,7 @@ public class RecipeService {
     @Transactional
     public Recipe updateRecipe(UUID id, RecipeRequest request, UserEntity user) {
         log.info("Updating recipe: {}", id);
-        Recipe recipe = getRecipeById(id);
+        Recipe recipe = findRecipeByIdOrThrow(id);
 
         if (!recipe.getAuthor().getId().equals(user.getId())) {
             throw new UnauthorizedAccessException("recipe", "update");
