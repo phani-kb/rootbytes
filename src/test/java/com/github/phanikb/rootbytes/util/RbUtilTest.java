@@ -28,8 +28,8 @@ public class RbUtilTest {
     @Test
     void testGetPath() {
         var request = new MockHttpServletRequest();
-        request.setRequestURI("/api/test");
+        request.setRequestURI("/api/v1/test");
         var webRequest = new ServletWebRequest(request);
-        assertEquals("/api/test", RbUtil.getPath(webRequest));
+        assertEquals("/api/v1/test", RbUtil.getPath(webRequest));
     }
 }

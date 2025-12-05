@@ -29,7 +29,7 @@ class GlobalExceptionHandlerTest {
     void setUp() {
         handler = new GlobalExceptionHandler();
         MockHttpServletRequest servletRequest = new MockHttpServletRequest();
-        servletRequest.setRequestURI("/api/test");
+        servletRequest.setRequestURI("/api/v1/test");
         webRequest = new ServletWebRequest(servletRequest);
     }
 
@@ -41,6 +41,6 @@ class GlobalExceptionHandlerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertNotNull(response.getBody());
         assertTrue(response.getBody().getMessage().contains("unexpected error"));
-        assertEquals("/api/test", response.getBody().getPath());
+        assertEquals("/api/v1/test", response.getBody().getPath());
     }
 }
