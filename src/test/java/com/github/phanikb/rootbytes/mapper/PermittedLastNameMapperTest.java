@@ -137,12 +137,9 @@ class PermittedLastNameMapperTest {
     }
 
     @Test
-    void shouldDirectlyTestAliasesToStringMethod() {
-        PermittedLastNameMapperImpl mapperImpl = new PermittedLastNameMapperImpl();
-
-        assertEquals("", mapperImpl.aliasesToString(null));
-
-        assertEquals("", mapperImpl.aliasesToString(List.of()));
+    void shouldMapAliasesToStringMethod() {
+        assertEquals("", mapper.aliasesToString(null));
+        assertEquals("", mapper.aliasesToString(List.of()));
 
         PermittedLastName entity = PermittedLastName.builder().build();
         LastNameAlias alias1 =
@@ -150,6 +147,6 @@ class PermittedLastNameMapperTest {
         LastNameAlias alias2 =
                 LastNameAlias.builder().alias("Test2").permittedLastName(entity).build();
 
-        assertEquals("Test1, Test2", mapperImpl.aliasesToString(List.of(alias1, alias2)));
+        assertEquals("Test1, Test2", mapper.aliasesToString(List.of(alias1, alias2)));
     }
 }

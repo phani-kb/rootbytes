@@ -150,4 +150,13 @@ class UnitControllerTest {
         assertNotNull(result.getBody());
         assertTrue(result.getBody().getSuccess());
     }
+
+    @Test
+    void shouldDeactivateUnit() {
+        var result = controller.deactivateUnit(unitId);
+
+        assertEquals(200, result.getStatusCode().value());
+        assertNotNull(result.getBody());
+        assertTrue(result.getBody().getSuccess());
+    }
 }

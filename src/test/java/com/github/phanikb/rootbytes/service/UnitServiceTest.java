@@ -22,11 +22,13 @@ import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;
+import com.github.phanikb.rootbytes.exception.ResourceInUseException;
 import com.github.phanikb.rootbytes.exception.ResourceNotFoundException;
 import com.github.phanikb.rootbytes.repository.UnitRepository;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -326,5 +328,34 @@ public class UnitServiceTest {
         assertTrue(teaspoon.isActive());
         verify(repository).findById(id);
         verify(repository).save(any(Unit.class));
+    }
+
+    @Test
+    void shouldDeactivateUnit() {
+        UUID id = gram.getId();
+        gram.setActive(false);
+
+        when(repository.findById(id)).thenReturn(Optional.of(gram));
+        when(repository.save(any(Unit.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        service.deactivateUnit(id);
+
+        assertFalse(gram.isActive());
+        verify(repository).findById(id);
+        verify(repository).save(any(Unit.class));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeactivatingUsedUnit() {
+        UUID id = tablespoon.getId();
+
+        when(repository.findById(id)).thenReturn(Optional.of(tablespoon));
+        when(repository.isUsedInIngredients(id)).thenReturn(true);
+
+        assertThrows(ResourceInUseException.class, () -> service.deactivateUnit(id));
+
+        verify(repository).findById(id);
+        verify(repository).isUsedInIngredients(id);
+        verify(repository, never()).save(any(Unit.class));
     }
 }
