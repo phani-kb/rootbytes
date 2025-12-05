@@ -198,7 +198,7 @@ class PermittedLastNameServiceTest {
             List<PermittedLastName> result = service.searchLastNames("mar");
 
             assertEquals(1, result.size());
-            assertEquals("Kumar", result.get(0).getLastName());
+            assertEquals("Kumar", result.getFirst().getLastName());
         }
 
         @Test
@@ -209,7 +209,7 @@ class PermittedLastNameServiceTest {
             List<PermittedLastName> result = service.getByCategory("Indian");
 
             assertEquals(1, result.size());
-            assertEquals("Kumar", result.get(0).getLastName());
+            assertEquals("Kumar", result.getFirst().getLastName());
         }
 
         @Test

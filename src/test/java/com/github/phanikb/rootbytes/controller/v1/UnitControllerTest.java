@@ -75,6 +75,7 @@ class UnitControllerTest {
         assertEquals(200, result.getStatusCode().value());
         assertNotNull(result.getBody());
         assertTrue(result.getBody().getSuccess());
+        assertNotNull(result.getBody().getData());
         assertEquals(1, result.getBody().getData().size());
     }
 
@@ -101,6 +102,7 @@ class UnitControllerTest {
         assertEquals(200, result.getStatusCode().value());
         assertNotNull(result.getBody());
         assertTrue(result.getBody().getSuccess());
+        assertNotNull(result.getBody().getData());
         assertEquals(1, result.getBody().getData().size());
     }
 

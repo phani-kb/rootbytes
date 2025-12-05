@@ -294,6 +294,9 @@
               <style>PALANTIR</style>
               <formatJavadoc>true</formatJavadoc>
             </palantirJavaFormat>
+            <!--eclipse>
+              <file>${project.basedir}/src/main/resources/spotless/eclipse-formatter.xml</file>
+            </eclipse-->
             <importOrder>
               <wildcardsLast>false</wildcardsLast>
               <order>java,javax,jakarta,org,,com,com.github.phanikb,\#</order>
@@ -302,6 +305,7 @@
             <removeUnusedImports />
             <endWithNewline />
             <trimTrailingWhitespace />
+            <!--formatAnnotations /-->
           </java>
           <yaml>
             <includes>
@@ -613,8 +617,10 @@
           <excludes>
             <exclude>**/mapper/*MapperImpl.class</exclude>
             <exclude>**/config/H2Config.class</exclude>
-            <exclude>**/dto/**</exclude>
+            <exclude>**/config/RbConfig.class</exclude>
+            <exclude>**/config/DatabaseConfig.class</exclude>
             <exclude>**/entity/**</exclude>
+            <exclude>**/dto/**/request/**</exclude>
             <exclude>**/*Application.class</exclude>
           </excludes>
         </configuration>
