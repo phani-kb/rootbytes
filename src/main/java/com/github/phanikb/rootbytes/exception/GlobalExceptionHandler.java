@@ -186,4 +186,70 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAccessException(
+            UnauthorizedAccessException ex, WebRequest request) {
+        log.error("Unauthorized access error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Unauthorized access";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ApprovalNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleApprovalNotFoundException(
+            ApprovalNotFoundException ex, WebRequest request) {
+        log.error("Approval not found error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Approval not found";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleReviewNotFoundException(ReviewNotFoundException ex, WebRequest request) {
+        log.error("Review not found error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Review not found";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ResourceInUseException.class)
+    public ResponseEntity<ErrorResponse> handleResourceInUseException(ResourceInUseException ex, WebRequest request) {
+        log.error("Resource in use error: {}", LogSanitizer.sanitize(ex));
+
+        String message = ex.getMessage() != null ? ex.getMessage() : "Resource is currently in use";
+        ErrorResponse error = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(HttpStatus.CONFLICT.getReasonPhrase())
+                .message(message)
+                .path(RbUtil.getPath(request))
+                .build();
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
 }

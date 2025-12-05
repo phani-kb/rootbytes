@@ -19,7 +19,7 @@ public class IngredientResponse {
     private UUID id;
     private String name;
     private Double quantity;
-    private String unitId;
+    private UUID unitId;
     private String notes;
     private Integer orderIndex;
 }

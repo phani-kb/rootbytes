@@ -18,6 +18,7 @@ import com.github.phanikb.rootbytes.dto.v1.request.UnitRequest;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.enums.UnitType;
 import com.github.phanikb.rootbytes.exception.DuplicateResourceException;
+import com.github.phanikb.rootbytes.exception.ResourceInUseException;
 import com.github.phanikb.rootbytes.exception.ResourceNotFoundException;
 import com.github.phanikb.rootbytes.repository.UnitRepository;
 
@@ -111,6 +112,17 @@ public class UnitService {
         Unit updatedUnit = saveUnit(unit);
         log.info("Updated unit: {} ({})", updatedUnit.getName(), updatedUnit.getAbbreviation());
         return updatedUnit;
+    }
+
+    @Transactional
+    public void deactivateUnit(UUID id) {
+        Unit unit = getUnitById(id);
+        if (repository.isUsedInIngredients(id)) {
+            throw new ResourceInUseException(UNIT_ENTITY, UNIT_NAME, unit.getName());
+        }
+        unit.setActive(false);
+        repository.save(unit);
+        log.info("Deactivated unit: {} ({})", unit.getName(), unit.getAbbreviation());
     }
 
     @Transactional

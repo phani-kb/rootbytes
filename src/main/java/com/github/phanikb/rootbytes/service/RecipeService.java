@@ -117,7 +117,7 @@ public class RecipeService {
                 Ingredient ingredient = ingredientMapper.toEntity(req);
                 ingredient.setRecipe(recipe);
                 if (req.getUnitId() != null) {
-                    UUID unitId = UUID.fromString(req.getUnitId());
+                    UUID unitId = req.getUnitId();
                     unitRepository.findById(unitId).ifPresent(ingredient::setUnit);
                 }
                 ingredients.add(ingredient);

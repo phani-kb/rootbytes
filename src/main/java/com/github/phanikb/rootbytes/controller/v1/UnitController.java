@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -78,7 +77,14 @@ public class UnitController {
         return ResponseEntity.ok(RbApiResponse.success("Unit updated successfully", mapper.toResponse(unit)));
     }
 
-    @PatchMapping("/{id}/activate")
+    @PutMapping("/{id}/deactivate")
+    @PreAuthorize(Constants.ADMIN_MODERATOR_ROLE)
+    public ResponseEntity<RbApiResponse<Void>> deactivateUnit(@PathVariable UUID id) {
+        service.deactivateUnit(id);
+        return ResponseEntity.ok(RbApiResponse.success("Unit deactivated successfully"));
+    }
+
+    @PutMapping("/{id}/activate")
     @PreAuthorize(Constants.ADMIN_MODERATOR_ROLE)
     public ResponseEntity<RbApiResponse<Void>> activateUnit(@PathVariable UUID id) {
         service.activateUnit(id);

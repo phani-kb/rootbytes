@@ -6,6 +6,8 @@
 
 package com.github.phanikb.rootbytes.dto.v1.request;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -36,7 +38,8 @@ public class IngredientRequest {
     @Positive(message = "Quantity" + MUST_BE_POSITIVE)
     private Double quantity;
 
-    private String unitId;
+    @NotNull(message = "Unit ID" + REQUIRED)
+    private UUID unitId;
 
     @Size(max = SIZE_XL, message = NOTES_TOO_LONG)
     private String notes;
