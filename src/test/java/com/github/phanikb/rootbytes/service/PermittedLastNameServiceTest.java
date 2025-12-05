@@ -6,11 +6,13 @@
 
 package com.github.phanikb.rootbytes.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,9 +32,12 @@ import com.github.phanikb.rootbytes.repository.PermittedLastNameRepository;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,253 +51,364 @@ class PermittedLastNameServiceTest {
     private SystemConfigService configService;
 
     @InjectMocks
-    private PermittedLastNameService permittedLastNameService;
+    private PermittedLastNameService service;
 
-    private PermittedLastName lastName1;
-    private PermittedLastName lastName2;
-    private PermittedLastName lastName3;
+    private PermittedLastName smith;
+    private PermittedLastName kumar;
     private PermittedLastNameRequest request;
 
     @BeforeEach
     void setUp() {
-        lastName1 = PermittedLastName.builder()
+        smith = PermittedLastName.builder()
                 .id(UUID.randomUUID())
                 .lastName("Smith")
                 .category("Common")
                 .isActive(true)
+                .aliases(new ArrayList<>())
                 .build();
 
-        lastName2 = PermittedLastName.builder()
+        kumar = PermittedLastName.builder()
                 .id(UUID.randomUUID())
-                .lastName("Johnson")
-                .category("Common")
+                .lastName("Kumar")
+                .category("Indian")
                 .isActive(true)
-                .build();
-
-        lastName3 = PermittedLastName.builder()
-                .id(UUID.randomUUID())
-                .lastName("Anderson")
-                .category("Scandinavian")
-                .isActive(true)
+                .aliases(new ArrayList<>())
                 .build();
 
         request = new PermittedLastNameRequest();
         request.setLastName("Williams");
         request.setCategory("Common");
+        request.setDescription("Common English surname");
     }
 
-    @Test
-    void shouldValidateLastNameWhenValidationEnabled() {
-        when(configService.getBooleanValue("validation.lastname.enabled", false))
-                .thenReturn(true);
-        when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
-                .thenReturn(false);
-        when(validLastNameRepository.existsActiveByLastNameIgnoreCase("Smith")).thenReturn(true);
+    @Nested
+    class ValidationTests {
 
-        assertDoesNotThrow(() -> permittedLastNameService.validateLastName("Smith"));
+        @Test
+        void shouldValidateLastNameWhenEnabled() {
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(true);
+            when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
+                    .thenReturn(false);
+            when(validLastNameRepository.existsActiveByLastNameIgnoreCase("Kumar"))
+                    .thenReturn(true);
 
-        verify(configService).getBooleanValue("validation.lastname.enabled", false);
-        verify(validLastNameRepository).existsActiveByLastNameIgnoreCase("Smith");
+            assertDoesNotThrow(() -> service.validateLastName("Kumar"));
+
+            verify(validLastNameRepository).existsActiveByLastNameIgnoreCase("Kumar");
+        }
+
+        @Test
+        void shouldSkipValidationWhenDisabled() {
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(false);
+
+            assertDoesNotThrow(() -> service.validateLastName("AnyName"));
+
+            verify(validLastNameRepository, never()).existsActiveByLastNameIgnoreCase(any());
+            verify(validLastNameRepository, never()).existsByLastName(any());
+        }
+
+        @Test
+        void shouldThrowWhenLastNameInvalid() {
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(true);
+            when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
+                    .thenReturn(false);
+            when(validLastNameRepository.existsActiveByLastNameIgnoreCase("InvalidName"))
+                    .thenReturn(false);
+
+            assertThrows(InvalidLastNameException.class, () -> service.validateLastName("InvalidName"));
+        }
+
+        @Test
+        void shouldValidateCaseSensitively() {
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(true);
+            when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
+                    .thenReturn(true);
+            when(validLastNameRepository.existsByLastName("Kumar")).thenReturn(true);
+
+            assertDoesNotThrow(() -> service.validateLastName("Kumar"));
+
+            verify(validLastNameRepository).existsByLastName("Kumar");
+            verify(validLastNameRepository, never()).existsActiveByLastNameIgnoreCase(any());
+        }
+
+        @Test
+        void shouldReturnValidationEnabledStatus() {
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(true);
+            assertTrue(service.isValidationEnabled());
+
+            when(configService.getBooleanValue("validation.lastname.enabled", false))
+                    .thenReturn(false);
+            assertFalse(service.isValidationEnabled());
+        }
     }
 
-    @Test
-    void shouldNotValidateWhenValidationDisabled() {
-        when(configService.getBooleanValue("validation.lastname.enabled", false))
-                .thenReturn(false);
+    @Nested
+    class QueryTests {
 
-        assertDoesNotThrow(() -> permittedLastNameService.validateLastName("AnyLastName"));
+        @Test
+        void shouldGetAllActiveLastNames() {
+            when(validLastNameRepository.findByIsActiveTrue()).thenReturn(List.of(smith, kumar));
 
-        verify(configService).getBooleanValue("validation.lastname.enabled", false);
+            List<PermittedLastName> result = service.getAllActiveLastNames();
+
+            assertEquals(2, result.size());
+            verify(validLastNameRepository).findByIsActiveTrue();
+        }
+
+        @Test
+        void shouldGetAllActiveLastNamesWithPagination() {
+            Pageable pageable = PageRequest.of(0, 10);
+            Page<PermittedLastName> page = new PageImpl<>(List.of(smith, kumar), pageable, 2);
+            when(validLastNameRepository.findByIsActiveTrue(pageable)).thenReturn(page);
+
+            Page<PermittedLastName> result = service.getAllActiveLastNames(pageable);
+
+            assertEquals(2, result.getTotalElements());
+            verify(validLastNameRepository).findByIsActiveTrue(pageable);
+        }
+
+        @Test
+        void shouldGetById() {
+            UUID id = kumar.getId();
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+
+            PermittedLastName result = service.getById(id);
+
+            assertEquals("Kumar", result.getLastName());
+            assertEquals("Indian", result.getCategory());
+        }
+
+        @Test
+        void shouldThrowWhenIdNotFound() {
+            UUID id = UUID.randomUUID();
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.empty());
+
+            assertThrows(ResourceNotFoundException.class, () -> service.getById(id));
+        }
+
+        @Test
+        void shouldSearchLastNames() {
+            when(validLastNameRepository.searchActiveByLastName("mar")).thenReturn(List.of(kumar));
+
+            List<PermittedLastName> result = service.searchLastNames("mar");
+
+            assertEquals(1, result.size());
+            assertEquals("Kumar", result.get(0).getLastName());
+        }
+
+        @Test
+        void shouldGetByCategory() {
+            when(validLastNameRepository.findByCategoryAndIsActiveTrue("Indian"))
+                    .thenReturn(List.of(kumar));
+
+            List<PermittedLastName> result = service.getByCategory("Indian");
+
+            assertEquals(1, result.size());
+            assertEquals("Kumar", result.get(0).getLastName());
+        }
+
+        @Test
+        void shouldGetAllCategories() {
+            when(validLastNameRepository.findDistinctCategories()).thenReturn(List.of("Common", "Indian"));
+
+            List<String> result = service.getAllCategories();
+
+            assertEquals(2, result.size());
+            assertTrue(result.contains("Indian"));
+        }
     }
 
-    @Test
-    void shouldThrowExceptionWhenLastNameNotValid() {
-        when(configService.getBooleanValue("validation.lastname.enabled", false))
-                .thenReturn(true);
-        when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
-                .thenReturn(false);
-        when(validLastNameRepository.existsActiveByLastNameIgnoreCase("InvalidName"))
-                .thenReturn(false);
+    @Nested
+    class CreateTests {
 
-        assertThrows(InvalidLastNameException.class, () -> permittedLastNameService.validateLastName("InvalidName"));
+        @Test
+        void shouldCreateLastName() {
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> {
+                PermittedLastName saved = inv.getArgument(0);
+                saved.setId(UUID.randomUUID());
+                return saved;
+            });
 
-        verify(validLastNameRepository).existsActiveByLastNameIgnoreCase("InvalidName");
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertNotNull(result);
+            verify(validLastNameRepository).save(any(PermittedLastName.class));
+        }
+
+        @Test
+        void shouldThrowWhenDuplicateLastName() {
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(true);
+
+            assertThrows(DuplicateResourceException.class, () -> service.createValidLastName(request));
+
+            verify(validLastNameRepository, never()).save(any());
+        }
+
+        @Test
+        void shouldCreateWithAliases() {
+            request.setAliases(List.of("Kumari", "Kumaran"));
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> {
+                PermittedLastName saved = inv.getArgument(0);
+                saved.setId(UUID.randomUUID());
+                return saved;
+            });
+
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertEquals(2, result.getAliases().size());
+        }
+
+        @Test
+        void shouldCreateWithEmptyAliases() {
+            request.setAliases(List.of());
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenReturn(smith);
+
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertNotNull(result);
+        }
+
+        @Test
+        void shouldCreateWithNullAliases() {
+            request.setAliases(null);
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenReturn(smith);
+
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertNotNull(result);
+        }
+
+        @Test
+        void shouldFilterBlankAliases() {
+            request.setAliases(List.of("Kumari", "", "  ", "Kumaran"));
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> {
+                PermittedLastName saved = inv.getArgument(0);
+                saved.setId(UUID.randomUUID());
+                return saved;
+            });
+
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertEquals(2, result.getAliases().size());
+        }
+
+        @Test
+        void shouldDeduplicateAliases() {
+            request.setAliases(List.of("Kumari", "Kumari", "Kumaran"));
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Williams")).thenReturn(false);
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> {
+                PermittedLastName saved = inv.getArgument(0);
+                saved.setId(UUID.randomUUID());
+                return saved;
+            });
+
+            PermittedLastName result = service.createValidLastName(request);
+
+            assertEquals(2, result.getAliases().size());
+        }
     }
 
-    @Test
-    void shouldValidateLastNameCaseSensitive() {
-        when(configService.getBooleanValue("validation.lastname.enabled", false))
-                .thenReturn(true);
-        when(configService.getBooleanValue("validation.lastname.case-sensitive", false))
-                .thenReturn(true);
-        when(validLastNameRepository.existsByLastName("Smith")).thenReturn(true);
+    @Nested
+    class UpdateTests {
 
-        assertDoesNotThrow(() -> permittedLastNameService.validateLastName("Smith"));
+        @Test
+        void shouldUpdateLastName() {
+            UUID id = kumar.getId();
+            request.setLastName("Kumar");
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        verify(validLastNameRepository).existsByLastName("Smith");
+            PermittedLastName result = service.updateValidLastName(id, request);
+
+            assertNotNull(result);
+            verify(validLastNameRepository).save(any(PermittedLastName.class));
+        }
+
+        @Test
+        void shouldThrowWhenUpdatingToDuplicateName() {
+            UUID id = kumar.getId();
+            request.setLastName("Smith");
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.existsByLastNameIgnoreCase("Smith")).thenReturn(true);
+
+            assertThrows(DuplicateResourceException.class, () -> service.updateValidLastName(id, request));
+
+            verify(validLastNameRepository, never()).save(any());
+        }
+
+        @Test
+        void shouldUpdateWithAliases() {
+            UUID id = kumar.getId();
+            request.setLastName("Kumar");
+            request.setAliases(List.of("Kumari", "Kumaran"));
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            PermittedLastName result = service.updateValidLastName(id, request);
+
+            assertEquals(2, result.getAliases().size());
+        }
+
+        @Test
+        void shouldAllowUpdateToSameNameCaseInsensitive() {
+            UUID id = kumar.getId();
+            request.setLastName("KUMAR");
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> inv.getArgument(0));
+
+            PermittedLastName result = service.updateValidLastName(id, request);
+
+            assertNotNull(result);
+            verify(validLastNameRepository, never()).existsByLastNameIgnoreCase(any());
+        }
     }
 
-    @Test
-    void shouldGetAllActiveLastNames() {
-        when(validLastNameRepository.findByIsActiveTrue()).thenReturn(List.of(lastName1, lastName2, lastName3));
+    @Nested
+    class ActivationTests {
 
-        List<PermittedLastName> result = permittedLastNameService.getAllActiveLastNames();
+        @Test
+        void shouldDeactivateLastName() {
+            UUID id = kumar.getId();
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        assertNotNull(result);
-        assertEquals(3, result.size());
-        verify(validLastNameRepository).findByIsActiveTrue();
-    }
+            service.deactivateLastName(id);
 
-    @Test
-    void shouldGetAllActiveLastNamesWithPagination() {
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<PermittedLastName> page = new PageImpl<>(List.of(lastName1, lastName2, lastName3));
+            assertFalse(kumar.getIsActive());
+            verify(validLastNameRepository).save(kumar);
+        }
 
-        when(validLastNameRepository.findByIsActiveTrue(pageable)).thenReturn(page);
+        @Test
+        void shouldActivateLastName() {
+            UUID id = kumar.getId();
+            kumar.setIsActive(false);
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
+            when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        Page<PermittedLastName> result = permittedLastNameService.getAllActiveLastNames(pageable);
+            service.activateLastName(id);
 
-        assertNotNull(result);
-        assertEquals(3, result.getContent().size());
-        verify(validLastNameRepository).findByIsActiveTrue(pageable);
-    }
+            assertTrue(kumar.getIsActive());
+            verify(validLastNameRepository).save(kumar);
+        }
 
-    @Test
-    void shouldGetById() {
-        UUID id = lastName1.getId();
-        when(validLastNameRepository.findById(id)).thenReturn(Optional.of(lastName1));
+        @Test
+        void shouldDeleteLastName() {
+            UUID id = kumar.getId();
+            when(validLastNameRepository.findById(id)).thenReturn(Optional.of(kumar));
 
-        PermittedLastName result = permittedLastNameService.getById(id);
+            service.deleteLastName(id);
 
-        assertNotNull(result);
-        assertEquals("Smith", result.getLastName());
-        verify(validLastNameRepository).findById(id);
-    }
-
-    @Test
-    void shouldThrowExceptionWhenIdNotFound() {
-        UUID id = UUID.randomUUID();
-        when(validLastNameRepository.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(ResourceNotFoundException.class, () -> permittedLastNameService.getById(id));
-
-        verify(validLastNameRepository).findById(id);
-    }
-
-    @Test
-    void shouldSearchLastNames() {
-        String searchTerm = "son";
-        when(validLastNameRepository.searchActiveByLastName(searchTerm)).thenReturn(List.of(lastName2, lastName3));
-
-        List<PermittedLastName> result = permittedLastNameService.searchLastNames(searchTerm);
-
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(validLastNameRepository).searchActiveByLastName(searchTerm);
-    }
-
-    @Test
-    void shouldGetByCategory() {
-        String category = "Common";
-        when(validLastNameRepository.findByCategoryAndIsActiveTrue(category)).thenReturn(List.of(lastName1, lastName2));
-
-        List<PermittedLastName> result = permittedLastNameService.getByCategory(category);
-
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        verify(validLastNameRepository).findByCategoryAndIsActiveTrue(category);
-    }
-
-    @Test
-    void shouldGetAllCategories() {
-        List<String> categories = List.of("Common", "Scandinavian", "Irish");
-        when(validLastNameRepository.findDistinctCategories()).thenReturn(categories);
-
-        List<String> result = permittedLastNameService.getAllCategories();
-
-        assertNotNull(result);
-        assertEquals(3, result.size());
-        verify(validLastNameRepository).findDistinctCategories();
-    }
-
-    @Test
-    void shouldCreateValidLastName() {
-        when(validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName()))
-                .thenReturn(false);
-        when(validLastNameRepository.save(any(PermittedLastName.class))).thenReturn(lastName1);
-
-        PermittedLastName result = permittedLastNameService.createValidLastName(request);
-
-        assertNotNull(result);
-        verify(validLastNameRepository).existsByLastNameIgnoreCase(request.getLastName());
-        verify(validLastNameRepository).save(any(PermittedLastName.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenLastNameAlreadyExists() {
-        when(validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName()))
-                .thenReturn(true);
-
-        assertThrows(DuplicateResourceException.class, () -> permittedLastNameService.createValidLastName(request));
-
-        verify(validLastNameRepository).existsByLastNameIgnoreCase(request.getLastName());
-    }
-
-    @Test
-    void shouldCreateValidLastNameWithAliases() {
-        request.setAliases(List.of("Will", "Willie"));
-        when(validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName()))
-                .thenReturn(false);
-        when(validLastNameRepository.save(any(PermittedLastName.class))).thenAnswer(invocation -> {
-            PermittedLastName saved = invocation.getArgument(0);
-            saved.setId(UUID.randomUUID());
-            return saved;
-        });
-
-        PermittedLastName result = permittedLastNameService.createValidLastName(request);
-
-        assertNotNull(result);
-        assertEquals(2, result.getAliases().size());
-        verify(validLastNameRepository).save(any(PermittedLastName.class));
-    }
-
-    @Test
-    void shouldCreateValidLastNameWithEmptyAliases() {
-        request.setAliases(List.of());
-        when(validLastNameRepository.existsByLastNameIgnoreCase(request.getLastName()))
-                .thenReturn(false);
-        when(validLastNameRepository.save(any(PermittedLastName.class))).thenReturn(lastName1);
-
-        PermittedLastName result = permittedLastNameService.createValidLastName(request);
-
-        assertNotNull(result);
-        verify(validLastNameRepository).save(any(PermittedLastName.class));
-    }
-
-    @Test
-    void shouldUpdateValidLastNameWithAliases() {
-        UUID id = lastName1.getId();
-        request.setAliases(List.of("Smithy", "Smitty"));
-        when(validLastNameRepository.findById(id)).thenReturn(Optional.of(lastName1));
-        when(validLastNameRepository.save(any(PermittedLastName.class)))
-                .thenAnswer(invocation -> invocation.<PermittedLastName>getArgument(0));
-
-        PermittedLastName result = permittedLastNameService.updateValidLastName(id, request);
-
-        assertNotNull(result);
-        assertEquals(2, result.getAliases().size());
-        verify(validLastNameRepository).save(any(PermittedLastName.class));
-    }
-
-    @Test
-    void shouldSearchLastNamesByAlias() {
-        String searchTerm = "Jon";
-        when(validLastNameRepository.searchActiveByLastName(searchTerm)).thenReturn(List.of(lastName2));
-
-        List<PermittedLastName> result = permittedLastNameService.searchLastNames(searchTerm);
-
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(validLastNameRepository).searchActiveByLastName(searchTerm);
+            verify(validLastNameRepository).delete(kumar);
+        }
     }
 }

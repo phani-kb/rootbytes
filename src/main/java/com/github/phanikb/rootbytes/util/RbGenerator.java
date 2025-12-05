@@ -14,7 +14,7 @@ import org.jspecify.annotations.Nullable;
 public final class RbGenerator {
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private static final int MAX_GENERATION_ATTEMPTS = 100;
-    private static final int DEFAULT_LENGTH = 6;
+    public static final int DEFAULT_LENGTH = 6;
     private static final String LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
     private static final String DIGITS = "0123456789";
     private static final String ALPHANUMERIC_LOWERCASE = LOWERCASE_LETTERS + DIGITS;
