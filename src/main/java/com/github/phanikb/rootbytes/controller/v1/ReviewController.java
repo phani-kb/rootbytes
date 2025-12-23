@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.github.phanikb.rootbytes.common.Constants;
 import com.github.phanikb.rootbytes.dto.v1.request.ReviewRequest;
 import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
 import com.github.phanikb.rootbytes.dto.v1.response.ReviewResponse;
@@ -35,7 +34,7 @@ import com.github.phanikb.rootbytes.service.ReviewService;
 
 @Slf4j
 @RestController
-@RequestMapping(Constants.API_V1 + "/reviews")
+@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 

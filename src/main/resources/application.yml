@@ -52,6 +52,7 @@ rootbytes:
     max-per-user: 1
   security:
     max-login-failures: 3
+    weak-passwords-path: /security/weak-passwords.txt
   favorites:
     max-per-user: 5
   validation:
@@ -86,3 +87,8 @@ rootbytes:
       weekly-hour: 6
       monthly-day: 1
       monthly-hour: 6
+  moderation:
+    strike-threshold: 3
+    ban-duration-days: 30
+    permanent-ban-threshold: 5
+    auto-unban-enabled: true

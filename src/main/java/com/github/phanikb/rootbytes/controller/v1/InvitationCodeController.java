@@ -33,7 +33,7 @@ import com.github.phanikb.rootbytes.service.InvitationCodeService;
 
 @Slf4j
 @RestController
-@RequestMapping(Constants.API_V1 + "/invitations")
+@RequestMapping("/invitations")
 @RequiredArgsConstructor
 public class InvitationCodeController {
 

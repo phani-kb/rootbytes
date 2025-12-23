@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.github.phanikb.rootbytes.common.Constants;
 import com.github.phanikb.rootbytes.dto.v1.request.NotificationQueueRequest;
 import com.github.phanikb.rootbytes.dto.v1.response.NotificationQueueResponse;
 import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
@@ -32,7 +31,7 @@ import com.github.phanikb.rootbytes.enums.notification.QueueStatus;
 import com.github.phanikb.rootbytes.service.NotificationQueueService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/notification-queue")
+@RequestMapping("/notification-queue")
 @RequiredArgsConstructor
 public class NotificationQueueController {
 

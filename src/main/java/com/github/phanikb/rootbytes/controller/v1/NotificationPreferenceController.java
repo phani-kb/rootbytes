@@ -28,7 +28,7 @@ import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
 import com.github.phanikb.rootbytes.service.NotificationPreferenceService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/notifications/preferences")
+@RequestMapping("/notifications/preferences")
 @PreAuthorize(Constants.AUTHENTICATED)
 @RequiredArgsConstructor
 public class NotificationPreferenceController {

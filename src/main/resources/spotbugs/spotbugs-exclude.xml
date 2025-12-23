@@ -13,11 +13,20 @@
     <Bug pattern="CT_CONSTRUCTOR_THROW" />
   </Match>
   <Match>
+    <Class name="~.*MapperImpl" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+  </Match>
+  <Match>
     <Bug pattern="CRLF_INJECTION_LOGS" />
   </Match>
   <Match>
     <Class name="com.github.phanikb.rootbytes.util.RbGenerator" />
     <Method name="extractBaseName" />
     <Bug pattern="IMPROPER_UNICODE" />
+  </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.service.ModerationService" />
+    <Method name="resolvePendingFlags" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
   </Match>
 </FindBugsFilter>

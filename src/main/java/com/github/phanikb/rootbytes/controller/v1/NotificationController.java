@@ -17,12 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
-import com.github.phanikb.rootbytes.common.Constants;
 import com.github.phanikb.rootbytes.dto.v1.response.NotificationCountResponse;
 import com.github.phanikb.rootbytes.service.NotificationService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/notifications")
+@RequestMapping("/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
 

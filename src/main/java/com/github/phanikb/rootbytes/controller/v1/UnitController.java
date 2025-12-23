@@ -34,7 +34,7 @@ import com.github.phanikb.rootbytes.mapper.UnitMapper;
 import com.github.phanikb.rootbytes.service.UnitService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/units")
+@RequestMapping("/units")
 @RequiredArgsConstructor
 public class UnitController {
 

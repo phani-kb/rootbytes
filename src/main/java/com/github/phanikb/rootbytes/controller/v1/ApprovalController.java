@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import com.github.phanikb.rootbytes.common.Constants;
 import com.github.phanikb.rootbytes.dto.v1.request.ApprovalRequest;
 import com.github.phanikb.rootbytes.dto.v1.response.ApprovalResponse;
 import com.github.phanikb.rootbytes.dto.v1.response.RbApiResponse;
@@ -35,7 +34,7 @@ import com.github.phanikb.rootbytes.service.ApprovalService;
 
 @Slf4j
 @RestController
-@RequestMapping(Constants.API_V1 + "/approvals")
+@RequestMapping("/approvals")
 @RequiredArgsConstructor
 public class ApprovalController {
 

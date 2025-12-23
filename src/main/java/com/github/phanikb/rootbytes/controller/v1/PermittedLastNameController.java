@@ -43,7 +43,7 @@ import com.github.phanikb.rootbytes.mapper.PermittedLastNameMapper;
 import com.github.phanikb.rootbytes.service.PermittedLastNameService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/permitted-lastnames")
+@RequestMapping("/permitted-lastnames")
 @RequiredArgsConstructor
 public class PermittedLastNameController {
 

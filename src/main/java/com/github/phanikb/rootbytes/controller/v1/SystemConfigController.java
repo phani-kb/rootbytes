@@ -35,7 +35,7 @@ import com.github.phanikb.rootbytes.security.RbUserDetails;
 import com.github.phanikb.rootbytes.service.SystemConfigService;
 
 @RestController
-@RequestMapping(Constants.API_V1 + "/rbconfig")
+@RequestMapping("/rbconfig")
 @RequiredArgsConstructor
 public class SystemConfigController {
 
