@@ -7,7 +7,9 @@
 package com.github.phanikb.rootbytes.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import com.github.phanikb.rootbytes.dto.v1.request.InstructionRequest;
@@ -17,11 +19,11 @@ import com.github.phanikb.rootbytes.entity.Instruction;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface InstructionMapper {
 
-    @org.mapstruct.Mapping(target = "id", ignore = true)
-    @org.mapstruct.Mapping(target = "recipe", ignore = true)
-    @org.mapstruct.Named("toInstruction")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "recipe", ignore = true)
+    @Named("toInstruction")
     Instruction toEntity(InstructionRequest request);
 
-    @org.mapstruct.Named("toInstructionResponse")
+    @Named("toInstructionResponse")
     InstructionResponse toResponse(Instruction instruction);
 }

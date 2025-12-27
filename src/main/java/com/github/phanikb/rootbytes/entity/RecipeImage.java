@@ -14,6 +14,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,7 +28,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -37,6 +38,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import com.github.phanikb.rootbytes.enums.recipe.RecipeImageApprovalStatus;
 
 @Getter
 @Setter
@@ -90,11 +93,12 @@ public class RecipeImage {
     @Size(max = 255)
     private String caption;
 
+    @Enumerated(EnumType.STRING)
     @Size(max = 20)
     @NotNull
-    @ColumnDefault("'PENDING'")
     @Column(nullable = false, length = 20)
-    private String approvalStatus;
+    @Builder.Default
+    private RecipeImageApprovalStatus approvalStatus = RecipeImageApprovalStatus.PENDING;
 
     private Instant approvedAt;
 
@@ -134,4 +138,16 @@ public class RecipeImage {
 
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RecipeImageModeration> moderations;
+
+    public boolean isApproved() {
+        return this.approvalStatus == RecipeImageApprovalStatus.APPROVED;
+    }
+
+    public boolean isRejected() {
+        return this.approvalStatus == RecipeImageApprovalStatus.REJECTED;
+    }
+
+    public boolean isPending() {
+        return this.approvalStatus == RecipeImageApprovalStatus.PENDING;
+    }
 }

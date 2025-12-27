@@ -7,7 +7,9 @@
 package com.github.phanikb.rootbytes.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import com.github.phanikb.rootbytes.dto.v1.request.IngredientRequest;
@@ -17,13 +19,13 @@ import com.github.phanikb.rootbytes.entity.Ingredient;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
 public interface IngredientMapper {
 
-    @org.mapstruct.Mapping(source = "unit.id", target = "unitId")
-    @org.mapstruct.Named("toIngredientResponse")
+    @Mapping(source = "unit.id", target = "unitId")
+    @Named("toIngredientResponse")
     IngredientResponse toResponse(Ingredient ingredient);
 
-    @org.mapstruct.Mapping(target = "id", ignore = true)
-    @org.mapstruct.Mapping(target = "recipe", ignore = true)
-    @org.mapstruct.Mapping(target = "unit", ignore = true)
-    @org.mapstruct.Named("toIngredient")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "recipe", ignore = true)
+    @Mapping(target = "unit", ignore = true)
+    @Named("toIngredient")
     Ingredient toEntity(IngredientRequest request);
 }
