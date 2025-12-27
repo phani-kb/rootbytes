@@ -54,7 +54,8 @@ import com.github.phanikb.rootbytes.enums.recipe.RecipeVisibility;
 @AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = {"ingredients", "instructions", "author"})
+@ToString(
+        exclude = {"ingredients", "instructions", "author", "dietaryInfo", "images", "tagMappings", "uploadTrackings"})
 public class Recipe {
 
     @Id
@@ -128,6 +129,19 @@ public class Recipe {
     @OrderBy("stepNumber")
     @Builder.Default
     private List<Instruction> instructions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("orderIndex")
+    @Builder.Default
+    private List<RecipeImage> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<RecipeTagMapping> tagMappings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<RecipeImageUploadTracking> uploadTrackings = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
