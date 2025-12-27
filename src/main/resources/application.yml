@@ -92,3 +92,27 @@ rootbytes:
     ban-duration-days: 30
     permanent-ban-threshold: 5
     auto-unban-enabled: true
+  recipe:
+    image:
+      upload:
+        base-path: uploads
+        max-file-size-mb: 1
+        max-per-recipe: 3
+        max-pending-per-recipe: 3
+        auto-approve-author: false
+        allowed-formats:
+        - jpg
+        - jpeg
+        - png
+        - webp
+        thumbnail:
+          width: 300
+          height: 300
+        standard:
+          width: 800
+          height: 600
+        watermark:
+          enabled: true
+          text: RootBytes
+          opacity: 0.3
+          position: BOTTOM_RIGHT

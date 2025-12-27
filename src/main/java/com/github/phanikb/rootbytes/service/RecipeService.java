@@ -27,7 +27,7 @@ import com.github.phanikb.rootbytes.entity.Instruction;
 import com.github.phanikb.rootbytes.entity.Recipe;
 import com.github.phanikb.rootbytes.entity.RecipeDietaryInfo;
 import com.github.phanikb.rootbytes.entity.UserEntity;
-import com.github.phanikb.rootbytes.enums.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeStatus;
 import com.github.phanikb.rootbytes.exception.RecipeNotFoundException;
 import com.github.phanikb.rootbytes.exception.UnauthorizedAccessException;
 import com.github.phanikb.rootbytes.mapper.IngredientMapper;
@@ -79,7 +79,7 @@ public class RecipeService {
                 .version(1)
                 .status(RecipeStatus.DRAFT)
                 .isCurrentVersion(true)
-                .isPrivate(Boolean.TRUE.equals(request.getIsPrivate()))
+                .visibility(request.getVisibility())
                 .prepTimeMinutes(request.getPrepTimeMinutes())
                 .cookTimeMinutes(request.getCookTimeMinutes())
                 .servings(request.getServings())
@@ -95,8 +95,7 @@ public class RecipeService {
     }
 
     private void addDietaryInfoToRecipe(Recipe recipe, RecipeDietaryInfoRequest dietaryRequest) {
-        RecipeDietaryInfo.RecipeDietaryInfoBuilder builder =
-                RecipeDietaryInfo.builder().recipe(recipe);
+        RecipeDietaryInfo.RecipeDietaryInfoBuilder builder = RecipeDietaryInfo.builder().recipe(recipe);
 
         if (dietaryRequest != null) {
             builder.isVegetarian(dietaryRequest.getIsVegetarian() == null || dietaryRequest.getIsVegetarian())
@@ -107,8 +106,7 @@ public class RecipeService {
                     .hasOnion(Boolean.TRUE.equals(dietaryRequest.getHasOnion()))
                     .hasGarlic(Boolean.TRUE.equals(dietaryRequest.getHasGarlic()))
                     .hasEggs(Boolean.TRUE.equals(dietaryRequest.getHasEggs()))
-                    .hasSoy(Boolean.TRUE.equals(dietaryRequest.getHasSoy()))
-                    .hasShellfish(Boolean.TRUE.equals(dietaryRequest.getHasShellfish()));
+                    .hasSoy(Boolean.TRUE.equals(dietaryRequest.getHasSoy()));
         }
 
         recipe.setDietaryInfo(builder.build());

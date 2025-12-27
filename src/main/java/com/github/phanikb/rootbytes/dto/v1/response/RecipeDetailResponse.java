@@ -33,7 +33,7 @@ public class RecipeDetailResponse {
     private Integer version;
     private String status;
     private Boolean isCurrentVersion;
-    private Boolean isPrivate;
+    private String visibility;
     private RecipeDietaryInfoResponse dietaryInfo;
     private Integer prepTimeMinutes;
     private Integer cookTimeMinutes;

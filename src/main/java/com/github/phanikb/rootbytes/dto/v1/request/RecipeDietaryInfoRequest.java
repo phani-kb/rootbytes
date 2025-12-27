@@ -25,5 +25,4 @@ public class RecipeDietaryInfoRequest {
     private Boolean hasGarlic;
     private Boolean hasEggs;
     private Boolean hasSoy;
-    private Boolean hasShellfish;
 }

@@ -26,7 +26,7 @@ public class RecipeResponse {
     private Integer version;
     private String status;
     private Boolean isCurrentVersion;
-    private Boolean isPrivate;
+    private String visibility;
     private Integer prepTimeMinutes;
     private Integer cookTimeMinutes;
     private Integer servings;

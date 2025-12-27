@@ -121,7 +121,8 @@ create table if not exists recipes (
     version INTEGER not null default 1,
     status VARCHAR(30) not null default 'DRAFT',
     is_current_version BOOLEAN default false,
-    is_private BOOLEAN default false,
+    visibility VARCHAR(20) not null default 'PRIVATE',
+    primary_image_id uuid,
     prep_time_minutes INTEGER,
     cook_time_minutes INTEGER,
     servings INTEGER,
@@ -137,6 +138,7 @@ create table if not exists recipes (
         status in ('DRAFT', 'PENDING_REVIEW', 'PENDING_APPROVAL', 'PUBLISHED', 'SUSPENDED', 'REJECTED', 'PERMANENTLY_REJECTED', 'ARCHIVED')
     ),
     constraint chk_recipe_difficulty check (difficulty in ('EASY', 'MEDIUM', 'HARD')),
+    constraint chk_recipe_visibility check (visibility in ('PUBLIC', 'PRIVATE')),
     constraint uq_author_title_version unique (author_id, title, version),
     foreign key (author_id) references users (id)
 );
@@ -150,6 +152,137 @@ create index idx_recipes_published_at on recipes (published_at);
 create index idx_recipes_title on recipes (title);
 
 create index idx_recipes_is_current_version on recipes (is_current_version);
+
+-- Recipe Images table
+create table recipe_images (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    file_name VARCHAR(255) not null,
+    stored_name VARCHAR(255) not null,
+    file_path VARCHAR(1000) not null,
+    thumbnail_path VARCHAR(500),
+    file_size BIGINT not null,
+    mime_type VARCHAR(100),
+    width INTEGER,
+    height INTEGER,
+    caption VARCHAR(255),
+    approval_status VARCHAR(20) not null default 'PENDING',
+    approved_at TIMESTAMP,
+    approved_by uuid,
+    rejected_reason CLOB,
+    is_primary BOOLEAN,
+    order_index INTEGER not null,
+    uploaded_at TIMESTAMP not null default current_timestamp,
+    uploaded_by uuid not null,
+    updated_at TIMESTAMP not null default current_timestamp,
+    upload_ip VARCHAR(45),
+    constraint chk_image_approval_status check (approval_status in ('PENDING', 'APPROVED', 'REJECTED', 'FLAGGED')),
+    constraint uq_recipe_image_order unique (recipe_id, order_index),
+    constraint uq_recipe_image_filename unique (recipe_id, file_name),
+    constraint uq_recipe_image_storedname unique (recipe_id, stored_name),
+    constraint chk_image_file_size check (file_size <= 3 * 1024 * 1024),
+    constraint chk_image_mime_type check (mime_type in ('image/jpeg', 'image/png', 'image/webp')),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (approved_by) references users (id),
+    foreign key (uploaded_by) references users (id),
+    constraint chk_primary_image_order check (
+        (
+            is_primary
+            and order_index = 1
+        )
+        or (not is_primary)
+    )
+);
+
+create index idx_recipe_images_recipe on recipe_images (recipe_id);
+
+create index idx_recipe_images_uploader on recipe_images (uploaded_by);
+
+create index idx_recipe_images_status on recipe_images (approval_status);
+
+create index idx_recipe_images_recipe_status on recipe_images (recipe_id, approval_status);
+
+create index idx_recipe_images_uploaded_at on recipe_images (uploaded_at desc);
+
+create index idx_recipe_images_primary_order on recipe_images (is_primary, order_index);
+
+create index idx_recipe_images_primary on recipe_images (recipe_id, is_primary);
+
+alter table recipes add constraint fk_recipe_primary_image foreign key (primary_image_id) references recipe_images (id);
+
+-- Recipe Image Moderation table
+create table if not exists recipe_image_moderation (
+    id uuid default random_uuid () primary key,
+    image_id uuid not null,
+    moderator_id uuid not null,
+    action VARCHAR(20) not null,
+    previous_status VARCHAR(20),
+    new_status VARCHAR(20) not null,
+    reason VARCHAR(500),
+    notes CLOB,
+    created_at TIMESTAMP not null default current_timestamp,
+    constraint chk_moderation_action check (action in ('APPROVE', 'REJECT', 'FLAG', 'UNFLAG', 'DELETE')),
+    foreign key (image_id) references recipe_images (id) on delete cascade,
+    foreign key (moderator_id) references users (id)
+);
+
+create index idx_image_moderation_image on recipe_image_moderation (image_id);
+
+create index idx_image_moderation_moderator on recipe_image_moderation (moderator_id);
+
+create index idx_image_moderation_created_at on recipe_image_moderation (created_at desc);
+
+-- Recipe Image Upload Limits table
+create table if not exists recipe_image_upload_tracking (
+    id uuid default random_uuid () primary key,
+    recipe_id uuid not null,
+    user_id uuid not null,
+    approved_count INTEGER not null default 0,
+    pending_count INTEGER not null default 0,
+    rejected_count INTEGER not null default 0,
+    total_uploads INTEGER not null default 0,
+    last_upload_at TIMESTAMP,
+    created_at TIMESTAMP not null default current_timestamp,
+    updated_at TIMESTAMP not null default current_timestamp,
+    constraint uq_recipe_user_tracking unique (recipe_id, user_id),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (user_id) references users (id) on delete cascade
+);
+
+create index idx_upload_tracking_recipe on recipe_image_upload_tracking (recipe_id);
+
+create index idx_upload_tracking_user on recipe_image_upload_tracking (user_id);
+
+create index idx_upload_tracking_recipe_user on recipe_image_upload_tracking (recipe_id, user_id);
+
+create index idx_upload_tracking_last_upload on recipe_image_upload_tracking (last_upload_at desc);
+
+-- Recipe Tags table
+create table if not exists recipe_tags (
+    id uuid default random_uuid () primary key,
+    name VARCHAR(50) not null unique,
+    description VARCHAR(200),
+    usage_count INT not null default 0,
+    created_at TIMESTAMP not null default current_timestamp
+);
+
+create index idx_recipe_tags_name on recipe_tags (name);
+
+create index idx_recipe_tags_usage on recipe_tags (usage_count desc);
+
+-- Recipe Tag Mappings
+create table if not exists recipe_tag_mappings (
+    recipe_id uuid not null,
+    tag_id uuid not null,
+    created_at TIMESTAMP not null default current_timestamp,
+    primary key (recipe_id, tag_id),
+    foreign key (recipe_id) references recipes (id) on delete cascade,
+    foreign key (tag_id) references recipe_tags (id) on delete cascade
+);
+
+create index idx_recipe_tag_mappings_recipe on recipe_tag_mappings (recipe_id);
+
+create index idx_recipe_tag_mappings_tag on recipe_tag_mappings (tag_id);
 
 -- Recipe Dietary Info table
 create table if not exists recipe_dietary_info (
@@ -197,7 +330,7 @@ create table if not exists ingredients (
     id uuid default random_uuid () primary key,
     recipe_id uuid not null,
     name VARCHAR(200) not null,
-    quantity DECIMAL(10, 2),
+    quantity DOUBLE,
     unit_id uuid,
     notes CLOB,
     order_index INTEGER not null,

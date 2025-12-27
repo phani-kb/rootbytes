@@ -4,10 +4,9 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.enums;
+package com.github.phanikb.rootbytes.enums.recipe;
 
-public enum RecipeDifficulty {
-    EASY,
-    MEDIUM,
-    HARD
+public enum RecipeVisibility {
+    PUBLIC,
+    PRIVATE
 }

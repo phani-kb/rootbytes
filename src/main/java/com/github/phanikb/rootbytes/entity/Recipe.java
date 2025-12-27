@@ -42,8 +42,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
-import com.github.phanikb.rootbytes.enums.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeDifficulty;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeVisibility;
 
 @Entity
 @Table(name = "recipes")
@@ -89,9 +90,10 @@ public class Recipe {
     @Builder.Default
     private Boolean isCurrentVersion = false;
 
-    @Column(name = "is_private")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     @Builder.Default
-    private Boolean isPrivate = false;
+    private RecipeVisibility visibility = RecipeVisibility.PRIVATE;
 
     @Column(name = "strike_count")
     @Builder.Default
@@ -186,5 +188,9 @@ public class Recipe {
             }
         }
         this.instructions = result;
+    }
+
+    public boolean isPrivate() {
+        return this.visibility == RecipeVisibility.PRIVATE;
     }
 }

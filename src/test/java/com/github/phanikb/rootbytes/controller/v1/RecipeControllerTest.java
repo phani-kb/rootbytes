@@ -29,8 +29,9 @@ import com.github.phanikb.rootbytes.dto.v1.response.RecipeDietaryInfoResponse;
 import com.github.phanikb.rootbytes.dto.v1.response.RecipeResponse;
 import com.github.phanikb.rootbytes.entity.Recipe;
 import com.github.phanikb.rootbytes.entity.UserEntity;
-import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
-import com.github.phanikb.rootbytes.enums.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeDifficulty;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeVisibility;
 import com.github.phanikb.rootbytes.mapper.RecipeMapper;
 import com.github.phanikb.rootbytes.service.RecipeService;
 
@@ -83,7 +84,7 @@ class RecipeControllerTest {
                 .version(1)
                 .status(RecipeStatus.PUBLISHED)
                 .isCurrentVersion(true)
-                .isPrivate(false)
+                .visibility(RecipeVisibility.PUBLIC)
                 .prepTimeMinutes(15)
                 .cookTimeMinutes(30)
                 .servings(4)
@@ -102,11 +103,11 @@ class RecipeControllerTest {
                 .version(1)
                 .status("PUBLISHED")
                 .isCurrentVersion(true)
-                .isPrivate(false)
+                .visibility(RecipeVisibility.PUBLIC.name())
                 .prepTimeMinutes(15)
                 .cookTimeMinutes(30)
                 .servings(4)
-                .difficulty("MEDIUM")
+                .difficulty(RecipeDifficulty.MEDIUM.name())
                 .cuisine("Italian")
                 .category("Main Course")
                 .build();
@@ -130,7 +131,7 @@ class RecipeControllerTest {
                 .version(1)
                 .status("PUBLISHED")
                 .isCurrentVersion(true)
-                .isPrivate(false)
+                .visibility(RecipeVisibility.PUBLIC.name())
                 .dietaryInfo(dietaryInfoResponse)
                 .prepTimeMinutes(15)
                 .cookTimeMinutes(30)

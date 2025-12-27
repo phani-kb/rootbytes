@@ -9,7 +9,21 @@ values
     ('security.max-login-failures', '3', 'Maximum login failures before lockout'),
     ('validation.lastname.enabled', 'true', 'Enable last name validation against valid list'),
     ('locale.default', 'en', 'Default application locale'),
-    ('locale.supported', 'en', 'Supported application locales');
+    ('locale.supported', 'en', 'Supported application locales'),
+    ('recipe.image.upload.base-path', 'uploads', 'Base path for recipe image uploads'),
+    ('recipe.image.upload.max-file-size-mb', '1', 'Maximum file size for recipe images in MB'),
+    ('recipe.image.upload.max-per-recipe', '3', 'Maximum images per recipe'),
+    ('recipe.image.upload.max-pending-per-recipe', '3', 'Maximum pending images per recipe'),
+    ('recipe.image.upload.auto-approve-author', 'false', 'Auto-approve images from recipe author'),
+    ('recipe.image.upload.allowed-formats', 'jpg,jpeg,png,webp', 'Allowed image formats'),
+    ('recipe.image.upload.thumbnail.width', '300', 'Thumbnail image width in pixels'),
+    ('recipe.image.upload.thumbnail.height', '300', 'Thumbnail image height in pixels'),
+    ('recipe.image.upload.standard.width', '800', 'Standard image width in pixels'),
+    ('recipe.image.upload.standard.height', '600', 'Standard image height in pixels'),
+    ('recipe.image.upload.watermark.enabled', 'true', 'Enable watermark on images'),
+    ('recipe.image.upload.watermark.text', 'RootBytes', 'Watermark text'),
+    ('recipe.image.upload.watermark.opacity', '0.3', 'Watermark opacity'),
+    ('recipe.image.upload.watermark.position', 'BOTTOM_RIGHT', 'Watermark position');
 
 delete from units;
 
@@ -73,4 +87,10 @@ delete from lastname_aliases;
 
 insert into
     lastname_aliases (permitted_lastname_id, alias)
-select id, 'Kumari' from permitted_lastnames where last_name = 'Kumar';
+select
+    id,
+    'Kumari'
+from
+    permitted_lastnames
+where
+    last_name = 'Kumar';

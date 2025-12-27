@@ -18,7 +18,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeDifficulty;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeVisibility;
 
 import static com.github.phanikb.rootbytes.common.ValidationConstants.MAX_INGREDIENTS;
 import static com.github.phanikb.rootbytes.common.ValidationConstants.MAX_INSTRUCTIONS;
@@ -72,7 +73,7 @@ public class RecipeRequest {
     @Size(max = SIZE_S, message = CATEGORY_TOO_LONG)
     private String category;
 
-    private Boolean isPrivate;
+    private RecipeVisibility visibility;
 
     @Valid
     private RecipeDietaryInfoRequest dietaryInfo;

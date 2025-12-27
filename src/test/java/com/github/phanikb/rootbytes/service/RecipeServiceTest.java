@@ -39,8 +39,9 @@ import com.github.phanikb.rootbytes.entity.Instruction;
 import com.github.phanikb.rootbytes.entity.Recipe;
 import com.github.phanikb.rootbytes.entity.Unit;
 import com.github.phanikb.rootbytes.entity.UserEntity;
-import com.github.phanikb.rootbytes.enums.RecipeDifficulty;
-import com.github.phanikb.rootbytes.enums.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeDifficulty;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeVisibility;
 import com.github.phanikb.rootbytes.exception.RecipeNotFoundException;
 import com.github.phanikb.rootbytes.exception.UnauthorizedAccessException;
 import com.github.phanikb.rootbytes.mapper.IngredientMapper;
@@ -115,7 +116,7 @@ class RecipeServiceTest {
                 .version(1)
                 .status(RecipeStatus.DRAFT)
                 .isCurrentVersion(true)
-                .isPrivate(false)
+                .visibility(RecipeVisibility.PUBLIC)
                 .prepTimeMinutes(15)
                 .cookTimeMinutes(30)
                 .servings(4)
@@ -198,7 +199,7 @@ class RecipeServiceTest {
         assertEquals(author, captured.getAuthor());
         assertEquals(RecipeStatus.DRAFT, captured.getStatus());
         assertTrue(captured.getIsCurrentVersion());
-        assertFalse(captured.getIsPrivate());
+        assertFalse(captured.isPrivate());
         assertNotNull(captured.getDietaryInfo());
         assertFalse(captured.getDietaryInfo().getIsVegetarian());
     }
@@ -237,7 +238,7 @@ class RecipeServiceTest {
                 .difficulty(RecipeDifficulty.HARD)
                 .cuisine("French")
                 .category("Dessert")
-                .isPrivate(true)
+                .visibility(RecipeVisibility.PRIVATE)
                 .dietaryInfo(dietaryInfo)
                 .ingredients(List.of(ingredientRequest))
                 .instructions(List.of(instructionRequest))
@@ -273,7 +274,7 @@ class RecipeServiceTest {
         assertEquals(RecipeDifficulty.HARD, captured.getDifficulty());
         assertEquals("French", captured.getCuisine());
         assertEquals("Dessert", captured.getCategory());
-        assertTrue(captured.getIsPrivate());
+        assertTrue(captured.isPrivate());
 
         assertNotNull(captured.getDietaryInfo());
         assertFalse(captured.getDietaryInfo().getIsVegetarian());

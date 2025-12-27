@@ -73,8 +73,4 @@ public class RecipeDietaryInfo {
     @Column(name = "has_soy")
     @Builder.Default
     private Boolean hasSoy = false;
-
-    @Column(name = "has_shellfish")
-    @Builder.Default
-    private Boolean hasShellfish = false;
 }

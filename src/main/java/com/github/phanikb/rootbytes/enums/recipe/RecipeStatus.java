@@ -4,7 +4,7 @@
  * Author: Phani K
  */
 
-package com.github.phanikb.rootbytes.enums;
+package com.github.phanikb.rootbytes.enums.recipe;
 
 public enum RecipeStatus {
     DRAFT,

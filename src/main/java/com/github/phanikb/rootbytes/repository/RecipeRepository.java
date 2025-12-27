@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.github.phanikb.rootbytes.entity.Recipe;
 import com.github.phanikb.rootbytes.entity.UserEntity;
-import com.github.phanikb.rootbytes.enums.RecipeStatus;
+import com.github.phanikb.rootbytes.enums.recipe.RecipeStatus;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
@@ -34,7 +34,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
             SELECT r FROM Recipe r
             WHERE r.status = :status
             AND r.isCurrentVersion = true
-            AND (r.isPrivate = false OR r.author = :user)
+            AND (r.visibility = 'PUBLIC' OR r.author = :user)
             """)
     Page<Recipe> findPublishedRecipes(
             @Param("status") RecipeStatus status, @Param("user") UserEntity user, Pageable pageable);
@@ -44,7 +44,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
             WHERE r.author.lastName = :lastName
             AND r.status = 'PUBLISHED'
             AND r.isCurrentVersion = true
-            AND r.isPrivate = false
+            AND r.visibility = 'PUBLIC'
             """)
     Page<Recipe> findByLastName(@Param("lastName") String lastName, Pageable pageable);
 
