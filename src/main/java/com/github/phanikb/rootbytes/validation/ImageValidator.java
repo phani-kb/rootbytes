@@ -38,7 +38,7 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Multipart
 
         if (file.getSize() > maxSize) {
             context.buildConstraintViolationWithTemplate(
-                    String.format("File size exceeds maximum allowed size of %d MB", maxSize / (1024 * 1024)))
+                            String.format("File size exceeds maximum allowed size of %d MB", maxSize / (1024 * 1024)))
                     .addConstraintViolation();
             return false;
         }
@@ -46,7 +46,7 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Multipart
         String contentType = file.getContentType();
         if (contentType == null || !allowedTypes.contains(contentType.toLowerCase(Locale.ROOT))) {
             context.buildConstraintViolationWithTemplate(
-                    String.format("Invalid file type. Allowed types: %s", String.join(", ", allowedTypes)))
+                            String.format("Invalid file type. Allowed types: %s", String.join(", ", allowedTypes)))
                     .addConstraintViolation();
             return false;
         }
