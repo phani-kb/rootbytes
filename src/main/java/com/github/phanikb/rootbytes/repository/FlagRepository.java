@@ -12,7 +12,6 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.github.phanikb.rootbytes.entity.Flag;
@@ -25,8 +24,7 @@ public interface FlagRepository extends JpaRepository<Flag, UUID> {
 
     Page<Flag> findByStatus(FlagStatus status, Pageable pageable);
 
-    @Query("SELECT f FROM Flag f WHERE f.status = 'PENDING' ORDER BY f.createdAt ASC")
-    Page<Flag> findPendingFlags(Pageable pageable);
+    Page<Flag> findByStatusOrderByCreatedAtAsc(FlagStatus status, Pageable pageable);
 
     long countByRecipeIdAndStatus(UUID recipeId, FlagStatus status);
 

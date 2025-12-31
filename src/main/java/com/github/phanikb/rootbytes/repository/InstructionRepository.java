@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.github.phanikb.rootbytes.entity.Instruction;
@@ -26,6 +24,5 @@ public interface InstructionRepository extends JpaRepository<Instruction, UUID> 
 
     void deleteByRecipeId(UUID recipeId);
 
-    @Query("SELECT i FROM Instruction i WHERE i.recipe.id = :recipeId ORDER BY i.stepNumber ASC")
-    List<Instruction> findByRecipeIdOrderByStepNumber(@Param("recipeId") UUID recipeId);
+    List<Instruction> findByRecipeIdOrderByStepNumberAsc(UUID recipeId);
 }
