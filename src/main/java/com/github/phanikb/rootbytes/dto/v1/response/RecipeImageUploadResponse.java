@@ -20,7 +20,7 @@ import com.github.phanikb.rootbytes.enums.recipe.RecipeImageApprovalStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeImageResponse {
+public class RecipeImageUploadResponse {
     private UUID id;
     private UUID recipeId;
     private String fileName;

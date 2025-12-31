@@ -95,7 +95,8 @@ public class RecipeService {
     }
 
     private void addDietaryInfoToRecipe(Recipe recipe, RecipeDietaryInfoRequest dietaryRequest) {
-        RecipeDietaryInfo.RecipeDietaryInfoBuilder builder = RecipeDietaryInfo.builder().recipe(recipe);
+        RecipeDietaryInfo.RecipeDietaryInfoBuilder builder =
+                RecipeDietaryInfo.builder().recipe(recipe);
 
         if (dietaryRequest != null) {
             builder.isVegetarian(dietaryRequest.getIsVegetarian() == null || dietaryRequest.getIsVegetarian())

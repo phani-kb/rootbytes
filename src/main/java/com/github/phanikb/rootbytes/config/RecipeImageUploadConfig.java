@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import lombok.Data;
 
 @Configuration
-@ConfigurationProperties(prefix = "rootbytes.image.upload")
+@ConfigurationProperties(prefix = "rootbytes.recipe.image.upload")
 @Data
-public class ImageUploadConfig {
+public class RecipeImageUploadConfig {
     private String basePath;
     private int maxImagesPerRecipe;
     private long maxImageSizeBytes;
@@ -40,7 +40,7 @@ public class ImageUploadConfig {
 
     @Data
     public static class WatermarkConfig {
-        private Boolean enabled;
+        private boolean enabled;
         private String text;
         private Float opacity;
         private String position; // TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, CENTER

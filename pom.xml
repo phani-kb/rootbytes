@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <relativePath />
   </parent>
   <groupId>com.github.phanikb</groupId>
@@ -45,6 +45,7 @@
     <caffeine.version>3.2.3</caffeine.version>
     <commons-io.version>2.21.0</commons-io.version>
     <commons-lang3.version>3.20.0</commons-lang3.version>
+    <commons.imaging.version>1.0.0-alpha6</commons.imaging.version>
     <errorprone.version>2.44.0</errorprone.version>
     <findsecbugs.version>1.13.0</findsecbugs.version>
     <flyway.version>11.17.1</flyway.version>
@@ -80,11 +81,18 @@
     <testcontainers.junit.version>1.21.3</testcontainers.junit.version>
     <testcontainers.postgresql.version>1.21.3</testcontainers.postgresql.version>
     <testcontainers.version>2.0.2</testcontainers.version>
+    <thumbnailator.version>0.4.21</thumbnailator.version>
+    <tika.version>3.2.3</tika.version>
     <versions.maven.plugin.version>2.16.2</versions.maven.plugin.version>
   </properties>
 
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>${commons-io.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
@@ -94,6 +102,7 @@
   </dependencyManagement>
 
   <dependencies>
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
@@ -102,6 +111,11 @@
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
     </dependency>
 
     <dependency>
@@ -115,6 +129,21 @@
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>net.coobird</groupId>
+      <artifactId>thumbnailator</artifactId>
+      <version>${thumbnailator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-imaging</artifactId>
+      <version>${commons.imaging.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>${tika.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
@@ -208,6 +237,11 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-jpa-test</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

@@ -11,12 +11,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
 
-import com.github.phanikb.rootbytes.dto.v1.request.RecipeImageRequest;
-import com.github.phanikb.rootbytes.dto.v1.response.RecipeImageResponse;
+import com.github.phanikb.rootbytes.dto.v1.request.RecipeImageUploadRequest;
+import com.github.phanikb.rootbytes.dto.v1.response.RecipeImageUploadResponse;
 import com.github.phanikb.rootbytes.entity.RecipeImage;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.WARN)
-public interface RecipeImageMapper {
+public interface RecipeImageUploadMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "recipe", ignore = true)
@@ -37,10 +37,10 @@ public interface RecipeImageMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "uploadIp", ignore = true)
     @Mapping(target = "moderations", ignore = true)
-    RecipeImage toEntity(RecipeImageRequest request);
+    RecipeImage toEntity(RecipeImageUploadRequest request);
 
     @Mapping(source = "recipe.id", target = "recipeId")
     @Mapping(source = "approvedBy.id", target = "approvedById")
     @Mapping(source = "uploadedBy.id", target = "uploadedById")
-    RecipeImageResponse toResponse(RecipeImage recipeImage);
+    RecipeImageUploadResponse toResponse(RecipeImage recipeImage);
 }

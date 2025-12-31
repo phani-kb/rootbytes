@@ -6,35 +6,19 @@
 
 package com.github.phanikb.rootbytes.dto.v1.request;
 
-import java.util.UUID;
-
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
-
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.github.phanikb.rootbytes.validation.ValidImage;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeImageRequest {
-    @NotNull(message = "Recipe ID is required")
-    private UUID recipeId;
-
-    @NotNull(message = "Image file is required")
-    @ValidImage(
-            maxSize = 1 * 1024 * 1024,
-            allowedTypes = {"image/jpeg", "image/png", "image/webp"})
-    private MultipartFile image;
-
+public class RecipeImageUploadRequest {
     @Size(max = 500, message = "Caption cannot exceed 500 characters")
     private String caption;
 
@@ -42,6 +26,4 @@ public class RecipeImageRequest {
 
     @PositiveOrZero(message = "Order index must be zero or positive")
     private Integer orderIndex;
-
-    private UUID uploaderId; // authenticated user
 }

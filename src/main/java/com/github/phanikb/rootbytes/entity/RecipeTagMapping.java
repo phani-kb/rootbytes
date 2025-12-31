@@ -38,6 +38,7 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 public class RecipeTagMapping {
     @EmbeddedId
+    @Builder.Default
     private RecipeTagMappingId id = new RecipeTagMappingId();
 
     @MapsId("recipeId")
