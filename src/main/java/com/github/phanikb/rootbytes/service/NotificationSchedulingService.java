@@ -98,7 +98,6 @@ public class NotificationSchedulingService {
                 return nowInstant;
             }
         }
-
         throw new IllegalStateException("Unhandled notification frequency: " + frequency);
     }
 
