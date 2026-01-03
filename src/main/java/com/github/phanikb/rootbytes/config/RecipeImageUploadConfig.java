@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
+import com.github.phanikb.rootbytes.common.Constants;
+
 @Configuration
 @ConfigurationProperties(prefix = "rootbytes.recipe.image.upload")
 @Data
@@ -44,5 +46,9 @@ public class RecipeImageUploadConfig {
         private String text;
         private Float opacity;
         private String position; // TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, CENTER
+
+        public String getText() {
+            return text != null ? text : Constants.APPLICATION_NAME;
+        }
     }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.jspecify.annotations.NullMarked;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import com.github.phanikb.rootbytes.entity.RecipeImage;
 import com.github.phanikb.rootbytes.enums.recipe.RecipeImageApprovalStatus;
 
+@NullMarked
 @Repository
 public interface RecipeImageRepository extends JpaRepository<RecipeImage, UUID> {
 
@@ -45,6 +47,7 @@ public interface RecipeImageRepository extends JpaRepository<RecipeImage, UUID> 
     @EntityGraph(attributePaths = {"recipe"})
     Page<RecipeImage> findByUploadedByIdOrderByUploadedAtDesc(UUID uploaderId, Pageable pageable);
 
+    @Override
     @EntityGraph(attributePaths = {"recipe", "recipe.author", "uploadedBy"})
     Optional<RecipeImage> findById(UUID imageId);
 
