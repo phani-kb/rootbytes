@@ -25,6 +25,7 @@ public final class Constants {
     public static final int INVITATION_CODE_LENGTH = 8;
     public static final int MAX_INVITATION_CODE_LENGTH = 32;
     public static final String DEFAULT_USER_ROLE = "USER";
+    public static final String IMAGE_NOT_FOUND = "Image not found";
 
     public static final class Page {
         public static final int DEFAULT_PAGE_NUMBER = 0;

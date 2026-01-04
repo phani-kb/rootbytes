@@ -29,4 +29,27 @@
     <Method name="resolvePendingFlags" />
     <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
   </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.service.RecipeImageService" />
+    <Method name="validateImage" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+  </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.service.RecipeImageService" />
+    <Method name="hasValidImageExtension" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+  </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.service.RecipeImageService" />
+    <Method name="reorderImages" />
+    <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD" />
+  </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.util.RbPathUtil" />
+    <Bug pattern="IMPROPER_UNICODE" />
+  </Match>
+  <Match>
+    <Class name="com.github.phanikb.rootbytes.service.RecipeImageProcessingService" />
+    <Bug pattern="IMPROPER_UNICODE" />
+  </Match>
 </FindBugsFilter>

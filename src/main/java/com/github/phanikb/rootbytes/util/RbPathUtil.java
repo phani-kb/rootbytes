@@ -6,6 +6,7 @@
 
 package com.github.phanikb.rootbytes.util;
 
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.text.Normalizer;
 import java.util.UUID;
@@ -18,6 +19,25 @@ public final class RbPathUtil {
             Pattern.compile("^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\\.|$)", Pattern.CASE_INSENSITIVE);
 
     private RbPathUtil() {}
+
+    public static Path validateStoredPath(Path basePath, String storedPath) {
+        if (storedPath == null || storedPath.isBlank()) {
+            throw new IllegalArgumentException("Stored path cannot be null or blank");
+        }
+
+        try {
+            Path path = Path.of(storedPath).normalize();
+            Path base = basePath.toAbsolutePath().normalize();
+
+            if (!path.startsWith(base)) {
+                throw new SecurityException("Stored path is outside base: " + storedPath);
+            }
+
+            return path;
+        } catch (InvalidPathException e) {
+            throw new SecurityException("Invalid stored path: " + storedPath, e);
+        }
+    }
 
     public static Path createSafeRecipeImagePath(Path basePath, UUID recipeId) {
         if (recipeId == null) {
